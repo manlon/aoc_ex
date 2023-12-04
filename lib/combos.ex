@@ -10,8 +10,8 @@ defmodule Aoc2023Ex.Combos do
   defp reducer(item, rest, n), do: {map(combo_stream(rest, n - 1), &[item | &1]), rest_of(rest)}
 
   defp drop_help({:drop, n, enum}), do: {:drop, n + 1, enum}
-  defp drop_help(enum=%Stream{}), do: {:drop, 1, enum}
-  defp drop_help(enum=%{}), do: Enum.to_list(enum) |> drop_help()
+  defp drop_help(enum = %Stream{}), do: {:drop, 1, enum}
+  defp drop_help(enum = %{}), do: Enum.to_list(enum) |> drop_help()
   defp drop_help(enum) when is_list(enum), do: tl(enum)
   defp drop_help(enum), do: {:drop, 1, enum}
 
@@ -33,7 +33,6 @@ defmodule Aoc2023Ex.Combos do
     end)
     |> Stream.flat_map(fn {i, rest} -> Stream.map(rest, fn j -> [i, j] end) end)
   end
-
 
   def combos(_, 0), do: [[]]
   def combos([], _), do: []

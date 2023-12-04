@@ -40,11 +40,12 @@ defmodule Aoc2023Ex.Day02 do
         acc ->
           for [count, color] <- clause, reduce: acc do
             acc ->
-              {_, map} = Map.get_and_update(acc, color, fn c ->
-                {c, Enum.max([c || 0, count])}
-              end)
-              map
+              {_, map} =
+                Map.get_and_update(acc, color, fn c ->
+                  {c, Enum.max([c || 0, count])}
+                end)
 
+              map
           end
       end
       |> Map.values()
