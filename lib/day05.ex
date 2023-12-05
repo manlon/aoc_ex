@@ -53,10 +53,7 @@ defmodule Aoc2023Ex.Day05 do
 
   def map_ranges([], acc), do: acc
   def map_ranges([{{s, e}, []} | rest], acc), do: map_ranges(rest, Enum.min([s, acc]))
-
-  def map_ranges([{{s, e}, [[] | maps]} | rest], acc) do
-    map_ranges([{{s, e}, maps} | rest], acc)
-  end
+  def map_ranges([{r, [[] | maps]} | rest], acc), do: map_ranges([{r, maps} | rest], acc)
 
   def map_ranges([{{s, e}, maps = [[{r = rs..re, d} | mapranges] | nextmaps]} | rest], acc) do
     cond do
