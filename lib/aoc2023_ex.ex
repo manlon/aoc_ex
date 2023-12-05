@@ -34,8 +34,13 @@ defmodule Aoc2023Ex do
     ]
     # |> Enum.filter(fn mod -> :code.module_status(mod) == :loaded end)
     |> Enum.map(fn mod ->
-      {time, res} = :timer.tc(fn -> apply(mod, :solve, []) end)
-      IO.inspect(day: mod, result: res, time: "#{div(time, 1000)}ms")
+      case Code.ensure_compiled(mod) do
+        {:module, mod} ->
+          {time, res} = :timer.tc(fn -> apply(mod, :solve, []) end)
+          IO.inspect(day: mod, result: res, time: "#{div(time, 1000)}ms")
+        {:error, err} ->
+          IO.inspect("no module #{mod}")
+      end
     end)
 
     :ok
