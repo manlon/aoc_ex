@@ -3,19 +3,13 @@ defmodule Aoc2023Ex.Day02 do
   use Aoc2023Ex.Day
 
   defmodule Parser do
-    import NimbleParsec
+    use Aoc2023Ex.Parser
     colors = choice([string("red"), string("green"), string("blue")])
-    color_count = wrap(integer(min: 1) |> ignore(string(" ")) |> concat(colors))
-    clause = wrap(color_count |> repeat(concat(ignore(string(", ")), color_count)))
-    clauses = wrap(clause |> repeat(concat(ignore(string("; ")), clause)))
-    line = ignore(string("Game ")) |> integer(min: 1) |> ignore(string(": ")) |> concat(clauses)
-
-    defparsec(:parse_line_help, line)
-
-    def parse_line(line) do
-      {:ok, [gameno, clauses], _, _, _, _} = parse_line_help(line)
-      {gameno, clauses}
-    end
+    color_count = wrap(int() |> ispace() |> concat(colors))
+    clause = wrap(color_count |> repeat(concat(istr(", "), color_count)))
+    clauses = wrap(clause |> repeat(concat(istr("; "), clause)))
+    line = istr("Game ") |> int() |> istr(": ") |> concat(clauses)
+    defmatch(:parse_line, line)
   end
 
   @colors %{"red" => 12, "green" => 13, "blue" => 14}
@@ -23,7 +17,7 @@ defmodule Aoc2023Ex.Day02 do
   def input_games, do: Enum.map(input_lines(), &Parser.parse_line/1)
 
   def solve1 do
-    for {num, clauses} <- input_games(),
+    for [num, clauses] <- input_games(),
         Enum.all?(clauses, fn clause ->
           Enum.all?(clause, fn [count, color] ->
             count <= @colors[color]
@@ -35,7 +29,7 @@ defmodule Aoc2023Ex.Day02 do
   end
 
   def solve2 do
-    for {_, clauses} <- input_games() do
+    for [_, clauses] <- input_games() do
       for clause <- clauses, reduce: %{} do
         acc ->
           for [count, color] <- clause, reduce: acc do

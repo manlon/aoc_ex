@@ -3,11 +3,11 @@ defmodule Aoc2023Ex.Day04 do
 
   defmodule Parser do
     use Aoc2023Ex.Parser
-    nums = repeat(ispace() |> integer(min: 1))
-    halves = wrap(nums) |> istr(" |") |> concat(wrap(nums))
-    line = istr("Card") |> ispace() |> integer(min: 1) |> istr(":") |> concat(halves)
+    nums = repeat(ispace() |> int())
+    halves = wrap(nums) |> istr(" |") |> wrap(nums)
+    line = istr("Card") |> ispace() |> int() |> istr(":") |> concat(halves)
     defmatch(:parse_line, line)
-    def parsed_lines, do: Enum.map(Aoc2023Ex.Day04.input_lines(), &parse_line_match/1)
+    def parsed_lines, do: Enum.map(Aoc2023Ex.Day04.input_lines(), &parse_line/1)
   end
 
   def solve1 do
