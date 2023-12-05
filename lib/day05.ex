@@ -10,7 +10,7 @@ defmodule Aoc2023Ex.Day05 do
     map_title = noun |> istr("-to-") |> concat(noun) |> istr(" map:\n")
 
     int_lines = separated(wrap(line_of_ints), istr("\n"))
-    map = map_title |> concat(int_lines)
+    map = ignore(map_title) |> concat(int_lines)
     maps = separated(map, istr("\n\n"))
 
     input = seeds_line |> istr("\n\n") |> concat(maps)
@@ -21,7 +21,14 @@ defmodule Aoc2023Ex.Day05 do
     def parse_almanac(input) do
       [seed | maps] = String.split(input, "\n\n")
       seeds = parse_seeds_line(seed)
-      maps = for m <- maps, do: parse_map(m)
+
+      maps =
+        for m <- maps do
+          for [dest, src, l] <- parse_map(m) do
+            {src..(src + l - 1), dest - src}
+          end
+        end
+
       {seeds, maps}
     end
   end
@@ -29,8 +36,8 @@ defmodule Aoc2023Ex.Day05 do
   def solve1 do
     {seeds, maps} = Parser.parse_almanac(input())
 
-    for(s <- seeds, do: map_seed(s, maps))
-    |> Enum.min()
+    for(s <- seeds, do: {{s, s}, maps})
+    |> map_ranges(:infinity)
   end
 
   def solve2 do
@@ -40,28 +47,8 @@ defmodule Aoc2023Ex.Day05 do
       Enum.chunk_every(seeds, 2)
       |> Enum.map(fn [start, l] -> {start, start + l - 1} end)
 
-    maps = for [_, _ | map] <- maps, do: map
-
-    pairs = for range <- seed_ranges, do: {range, maps}
-
-    map_ranges(pairs, :infinity)
-  end
-
-  def map_seed(seed, []), do: seed
-
-  def map_seed(seed, [[_, _ | map] | maps]) do
-    range =
-      Enum.find(map, fn [_deststart, srcstart, l] ->
-        seed in srcstart..(srcstart + l - 1)
-      end)
-
-    case range do
-      nil ->
-        map_seed(seed, maps)
-
-      [deststart, srcstart, _l] ->
-        map_seed(deststart + (seed - srcstart), maps)
-    end
+    for(range <- seed_ranges, do: {range, maps})
+    |> map_ranges(:infinity)
   end
 
   def map_ranges([], acc), do: acc
@@ -71,29 +58,25 @@ defmodule Aoc2023Ex.Day05 do
     map_ranges([{{s, e}, maps} | rest], acc)
   end
 
-  def map_ranges([{{s, e}, maps = [map = [[dest, src, l] | maprest] | nextmaps]} | rest], acc) do
-    srcrange = src..(src + l - 1)
-
+  def map_ranges([{{s, e}, maps = [[{r = rs..re, d} | mapranges] | nextmaps]} | rest], acc) do
     cond do
-      s in srcrange and e in srcrange ->
-        d = dest - src
+      s in r and e in r ->
         map_ranges([{{s + d, e + d}, nextmaps} | rest], acc)
 
-      s in srcrange ->
-        split_range = [{{s, src + l - 1}, maps}, {{src + l, e}, maps}]
-
+      s in r ->
+        split_range = [{{s, re}, maps}, {{re + 1, e}, maps}]
         map_ranges(split_range ++ rest, acc)
 
-      e in srcrange ->
-        split_range = [{{s, src - 1}, maps}, {{src, e}, maps}]
+      e in r ->
+        split_range = [{{s, rs - 1}, maps}, {{rs, e}, maps}]
         map_ranges(split_range ++ rest, acc)
 
-      s < src and e > src + l - 1 ->
-        split_range = [{{s, src - 1}, maps}, {{src, src + l - 1}, maps}, {{src + l, e}, maps}]
+      s < rs and e > re ->
+        split_range = [{{s, rs - 1}, maps}, {{rs, re}, maps}, {{re + 1, e}, maps}]
         map_ranges(split_range ++ rest, acc)
 
       true ->
-        map_ranges([{{s, e}, [maprest | nextmaps]} | rest], acc)
+        map_ranges([{{s, e}, [mapranges | nextmaps]} | rest], acc)
     end
   end
 end
