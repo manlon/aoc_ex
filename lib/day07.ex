@@ -33,18 +33,18 @@ defmodule Aoc2023Ex.Day07 do
 
   @joker 0
   @other_ranks 2..14
-  def joker_hand(hand) do
+  def joker_hand_strength(hand) do
     others = Enum.filter(hand, fn c -> c != @joker end)
     num_jokers = length(hand) - length(others)
 
-    all_hands(num_jokers, others)
-    |> Enum.max_by(&hand_strength/1)
+    all_hand_strengths(num_jokers, others)
+    |> Enum.max()
   end
 
-  def all_hands(0, hold_cards), do: [hold_cards]
+  def all_hand_strengths(0, hold_cards), do: [hand_strength(hold_cards)]
 
-  def all_hands(n, hold_cards) do
-    Stream.flat_map(@other_ranks, fn c -> all_hands(n - 1, [c | hold_cards]) end)
+  def all_hand_strengths(n, hold_cards) do
+    Stream.flat_map(@other_ranks, fn c -> all_hand_strengths(n - 1, [c | hold_cards]) end)
   end
 
   def solve1 do
@@ -57,7 +57,7 @@ defmodule Aoc2023Ex.Day07 do
 
   def solve2 do
     Parser.parsed_input_jokers()
-    |> Enum.sort_by(fn {hand, _score} -> {hand_strength(joker_hand(hand)), hand} end)
+    |> Enum.sort_by(fn {hand, _score} -> {joker_hand_strength(hand), hand} end)
     |> Enum.with_index(1)
     |> Enum.map(fn {{_hand, score}, i} -> score * i end)
     |> Enum.sum()
