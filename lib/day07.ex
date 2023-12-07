@@ -8,8 +8,7 @@ defmodule Aoc2023Ex.Day07 do
       for line <- Aoc2023Ex.Day07.input_lines(),
           [hand, num] = String.split(line),
           num = String.to_integer(num),
-          hand = String.graphemes(hand),
-          hand = Enum.map(hand, fn c -> Map.get(ranks, c, nil) || String.to_integer(c) end) do
+          hand = Enum.map(String.graphemes(hand), fn c -> ranks[c] || String.to_integer(c) end) do
         {hand, num}
       end
     end
@@ -34,11 +33,8 @@ defmodule Aoc2023Ex.Day07 do
   @joker 0
   @other_ranks 2..14
   def joker_hand_strength(hand) do
-    others = Enum.filter(hand, fn c -> c != @joker end)
-    num_jokers = length(hand) - length(others)
-
-    all_hand_strengths(num_jokers, others)
-    |> Enum.max()
+    {jokers, others} = Enum.split_with(hand, &(&1 == @joker))
+    Enum.max(all_hand_strengths(length(jokers), others))
   end
 
   def all_hand_strengths(0, hold_cards), do: [hand_strength(hold_cards)]
@@ -47,19 +43,14 @@ defmodule Aoc2023Ex.Day07 do
     Stream.flat_map(@other_ranks, fn c -> all_hand_strengths(n - 1, [c | hold_cards]) end)
   end
 
-  def solve1 do
-    Parser.parsed_input()
-    |> Enum.sort_by(fn {hand, _} -> {hand_strength(hand), hand} end)
+  def score_all_hands(hands, ranker \\ &hand_strength/1) do
+    hands
+    |> Enum.sort_by(fn {hand, _} -> {ranker.(hand), hand} end)
     |> Enum.with_index(1)
     |> Enum.map(fn {{_hand, score}, i} -> score * i end)
     |> Enum.sum()
   end
 
-  def solve2 do
-    Parser.parsed_input_jokers()
-    |> Enum.sort_by(fn {hand, _score} -> {joker_hand_strength(hand), hand} end)
-    |> Enum.with_index(1)
-    |> Enum.map(fn {{_hand, score}, i} -> score * i end)
-    |> Enum.sum()
-  end
+  def solve1, do: score_all_hands(Parser.parsed_input())
+  def solve2, do: score_all_hands(Parser.parsed_input_jokers(), &joker_hand_strength/1)
 end
