@@ -46,21 +46,9 @@ defmodule Aoc2023Ex.Day07 do
   def all_hands(n, hold_cards) do
     Stream.flat_map(@other_ranks, fn c -> all_hands(n - 1, [c | hold_cards]) end)
   end
-
-  def compare_hands({rank1, meld1}, {rank2, meld2}) do
-    s1 = hand_strength(meld1)
-    s2 = hand_strength(meld2)
-
-    if s1 == s2 do
-      rank1 < rank2
-    else
-      s1 < s2
-    end
-  end
-
   def solve1 do
     Parser.parsed_input()
-    |> Enum.sort_by(fn {hand, _} -> {hand, hand} end, &compare_hands/2)
+    |> Enum.sort_by(fn {hand, _} -> {hand_strength(hand), hand} end)
     |> Enum.with_index(1)
     |> Enum.map(fn {{_hand, score}, i} -> score * i end)
     |> Enum.sum()
@@ -68,7 +56,7 @@ defmodule Aoc2023Ex.Day07 do
 
   def solve2 do
     Parser.parsed_input_jokers()
-    |> Enum.sort_by(fn {hand, _score} -> {hand, joker_hand(hand)} end, &compare_hands/2)
+    |> Enum.sort_by(fn {hand, _score} -> {hand_strength(joker_hand(hand)), hand} end)
     |> Enum.with_index(1)
     |> Enum.map(fn {{_hand, score}, i} -> score * i end)
     |> Enum.sum()
