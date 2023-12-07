@@ -46,6 +46,7 @@ defmodule Aoc2023Ex.Day07 do
   def all_hands(n, hold_cards) do
     Stream.flat_map(@other_ranks, fn c -> all_hands(n - 1, [c | hold_cards]) end)
   end
+
   def solve1 do
     Parser.parsed_input()
     |> Enum.sort_by(fn {hand, _} -> {hand_strength(hand), hand} end)
