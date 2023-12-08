@@ -8,7 +8,7 @@ defmodule Aoc2023Ex.Day07 do
       for line <- Aoc2023Ex.Day07.input_lines(),
           [hand, num] = String.split(line),
           num = String.to_integer(num),
-          hand = Enum.map(String.graphemes(hand), fn c -> ranks[c] || String.to_integer(c) end) do
+          hand = Enum.map(String.graphemes(hand), &(ranks[&1] || String.to_integer(&1))) do
         {hand, num}
       end
     end
@@ -31,16 +31,16 @@ defmodule Aoc2023Ex.Day07 do
   end
 
   @joker 0
-  @other_ranks 2..14
+  @ace 14
   def joker_hand_strength(hand) do
     {jokers, others} = Enum.split_with(hand, &(&1 == @joker))
-    Enum.max(all_hand_strengths(length(jokers), others))
+    Enum.max(all_hand_strengths(length(jokers), [@ace | others], others))
   end
 
-  def all_hand_strengths(0, hold_cards), do: [hand_strength(hold_cards)]
+  def all_hand_strengths(0, deck, hold_cards), do: [hand_strength(hold_cards)]
 
-  def all_hand_strengths(n, hold_cards) do
-    Stream.flat_map(@other_ranks, fn c -> all_hand_strengths(n - 1, [c | hold_cards]) end)
+  def all_hand_strengths(n, deck, hold_cards) do
+    Stream.flat_map(deck, &all_hand_strengths(n - 1, deck, [&1 | hold_cards]))
   end
 
   def score_all_hands(hands, ranker \\ &hand_strength/1) do
