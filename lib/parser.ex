@@ -9,6 +9,7 @@ defmodule Aoc2023Ex.Parser do
     def int(), do: integer(min: 1)
     def int(a), do: a |> integer(min: 1)
     def separated(a, sep), do: repeat(concat(a, sep)) |> concat(a)
+    def separated(x, a, sep), do: x |> repeat(concat(a, sep)) |> concat(a)
 
     defmacro defmatch(name, comb, opts \\ []) do
       quote do
