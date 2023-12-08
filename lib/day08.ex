@@ -22,52 +22,40 @@ defmodule Aoc2023Ex.Day08 do
     end
   end
 
-  @start "AAA"
-  @finish "ZZZ"
-
-  def travel(map, nodes, dirs, useddirs \\ [], steps \\ 0, wincond)
-
-  def travel(map, nodes, [], useddirs, steps, wincond),
-    do: travel(map, nodes, Enum.reverse(useddirs), [], steps, wincond)
-
-  def travel(map, nodes, [d | dirs], useddirs, steps, wincond) do
-    if rem(steps, 1_000_000) == 0, do: dbg(steps)
-
-    if wincond.(nodes) do
-      steps
-    else
-      nodes = for n <- nodes, do: map[n][d]
-      travel(map, nodes, dirs, [d | useddirs], steps + 1, wincond)
-    end
+  def rotate(q) do
+    {{:value, v}, q} = :queue.out(q)
+    {v, :queue.in(v, q)}
   end
 
-  def won?(nodes), do: nodes == [@finish]
-  # def won_ghosts?(nodes), do: Enum.all?(nodes, &String.ends_with?(&1, "Z"))
+  def travel(map, node \\ "AAA", dirs, steps \\ 0)
+  def travel(_, "ZZZ", _, steps), do: steps
 
-  def dist_to_end(map, node, dirs, useddirs \\ [], steps \\ 0)
+  def travel(map, node, dirs, steps) do
+    {d, dirs} = rotate(dirs)
+    travel(map, map[node][d], dirs, steps + 1)
+  end
 
-  def dist_to_end(map, node, [], useddirs, steps),
-    do: dist_to_end(map, node, Enum.reverse(useddirs), [], steps)
-
-  def dist_to_end(map, node, [d | dirs], useddirs, steps) do
+  def dist_to_end(map, node, dirs, steps \\ 0) do
     if String.ends_with?(node, "Z") do
-      l = length(dirs) + length(useddirs) + 1
+      l = :queue.len(dirs)
       if rem(steps, l) != 0, do: raise("oops")
       steps
     else
-      dist_to_end(map, map[node][d], dirs, [d | useddirs], steps + 1)
+      {d, dirs} = rotate(dirs)
+      dist_to_end(map, map[node][d], dirs, steps + 1)
     end
   end
 
   def solve1 do
     {dirs, map} = Parser.parsed_input()
-    travel(map, [@start], dirs, &won?/1)
+    travel(map, :queue.from_list(dirs))
   end
 
   def solve2 do
     {dirs, map} = Parser.parsed_input()
     l = length(dirs)
     nodes = Map.keys(map) |> Enum.filter(&String.ends_with?(&1, "A"))
+    dirs = :queue.from_list(dirs)
     dists = for(n <- nodes, do: div(dist_to_end(map, n, dirs), l))
     l * Enum.product(dists)
   end
