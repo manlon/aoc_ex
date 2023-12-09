@@ -1,25 +1,16 @@
 defmodule Aoc2023Ex.Day09 do
   use Aoc2023Ex.Day
 
-  def line_diffs([a, b]), do: [b - a]
+  def expand([]), do: {0, 0}
+
+  def expand(line) do
+    {l, r} = expand(line_diffs(line))
+    {hd(line) - l, Enum.at(line, -1) + r}
+  end
+
   def line_diffs([a, b | rest]), do: [b - a | line_diffs([b | rest])]
+  def line_diffs(_), do: []
 
-  def line_diff_tower([0], acc), do: acc
-  def line_diff_tower(list, acc), do: line_diff_tower(line_diffs(list), [list | acc])
-
-  def expansion(list) do
-    for row <- line_diff_tower(list, []), reduce: 0 do
-      acc -> Enum.at(row, -1) + acc
-    end
-  end
-
-  def left_expansion(list) do
-    for [x | _] <- line_diff_tower(list, []), reduce: 0 do
-      acc -> x - acc
-    end
-  end
-
-  def solve1, do: Enum.sum(Enum.map(input_line_ints(), &expansion/1))
-
-  def solve2, do: Enum.sum(Enum.map(input_line_ints(), &left_expansion/1))
+  def solve1, do: Enum.sum(for line <- input_line_ints(), {_, r} = expand(line), do: r)
+  def solve2, do: Enum.sum(for line <- input_line_ints(), {l, _} = expand(line), do: l)
 end
