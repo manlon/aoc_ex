@@ -1,7 +1,7 @@
 defmodule Aoc2023Ex.Day10 do
   use Aoc2023Ex.Day
 
-  @directions [ north: {-1, 0}, east: {0, 1}, south: {1, 0}, west: {0, -1} ]
+  @directions [north: {-1, 0}, east: {0, 1}, south: {1, 0}, west: {0, -1}]
 
   @turns %{
     "|" => %{north: :north, south: :south},
@@ -43,29 +43,19 @@ defmodule Aoc2023Ex.Day10 do
     |> Map.put_new(add(pos, @directions[dr]), @right)
   end
 
-  def fill_map(map, {maxr, maxc}) do
-    unfilled =
-      for r <- 0..maxr, c <- 0..maxc, !Map.has_key?(map, {r, c}) do
-        {r, c}
+  def flood_fill(map, {maxr, maxc}) do
+    {map, updated} =
+      for r <- 0..maxr,
+          c <- 0..maxc,
+          !Map.has_key?(map, {r, c}),
+          n <- four_neighbors({r, c}),
+          map[n] in [@left, @right],
+          reduce: {map, false} do
+        {map, _} ->
+          {Map.put(map, {r, c}, map[n]), true}
       end
 
-    if unfilled == [] do
-      map
-    else
-      for coord <- unfilled, reduce: map do
-        map ->
-          neighbs = four_neighbors(coord)
-
-          case Enum.find(neighbs, fn c -> map[c] in [@left, @right] end) do
-            nil ->
-              map
-
-            n ->
-              Map.put(map, coord, map[n])
-          end
-      end
-      |> fill_map({maxr, maxc})
-    end
+    if(updated, do: flood_fill(map, {maxr, maxc}), else: map)
   end
 
   def starting_state do
@@ -93,18 +83,9 @@ defmodule Aoc2023Ex.Day10 do
 
   def solve2 do
     {map, size, pos, dir, annotated} = starting_state()
-
-    map =
-      annotate(map, dir, pos, annotated)
-      |> fill_map(size)
-
-    inside =
-      if Enum.any?(map, fn {{x, y}, v} -> (x == 0 || y == 0) && v == @right end) do
-        @left
-      else
-        @right
-      end
-
+    map = flood_fill(annotate(map, dir, pos, annotated), size)
+    {_, outside} = Enum.find(map, fn {{x, y}, v} -> x * y == 0 && v in [@right, @left] end)
+    inside = if outside == @right, do: @left, else: @right
     Enum.count(map, fn {_, v} -> v == inside end)
   end
 end
