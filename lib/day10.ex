@@ -52,7 +52,7 @@ defmodule Aoc2023Ex.Day10 do
           map[n] in [@left, @right],
           reduce: {map, false} do
         {map, _} ->
-          {Map.put(map, {r, c}, map[n]), true}
+          {Map.put_new(map, {r, c}, map[n]), true}
       end
 
     if(updated, do: flood_fill(map, {maxr, maxc}), else: map)
