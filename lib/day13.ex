@@ -1,73 +1,30 @@
 defmodule Aoc2023Ex.Day13 do
   use Aoc2023Ex.Day
 
-  def input_maps, do: stanzas() |> Enum.map(&input_map_with_size/1)
+  def input_maps, do: for(s <- stanzas(), do: input_map_with_size(s) |> elem(0))
+  def rotate(map), do: for({{r, c}, v} <- map, into: %{}, do: {{c, r}, v})
 
-  def find_reflect({map, size}, ignore \\ nil) do
-    {r, c} =
-      case ignore do
-        nil -> {nil, nil}
-        [row: r] -> {r, nil}
-        [col: c] -> {nil, c}
-      end
-
-    if rr = find_reflect_row({map, size}, r) do
-      [row: rr]
-    else
-      if cc = find_reflect_col({map, size}, c) do
-        [col: cc]
-      else
-        nil
-      end
+  def reflection_score(map, misses \\ 0) do
+    case find_reflect_row(map, misses) do
+      nil -> find_reflect_row(rotate(map), misses) + 1
+      r -> (r + 1) * 100
     end
   end
 
-  def find_reflect_row({map, {maxrow, _}}, ignore \\ nil) do
-    0..(maxrow - 1)
-    |> Enum.filter(&(&1 != ignore))
-    |> Enum.find(fn r ->
+  def find_reflect_row(map, misses \\ 0) do
+    maxrow = Enum.max(for {{r, _}, _} <- map, do: r)
+
+    Enum.find(0..(maxrow - 1), fn r ->
       {g1, g2} = Enum.split_with(map, fn {{mr, _}, _} -> mr > r end)
-      {big, small} = if length(g1) > length(g2), do: {g1, g2}, else: {g2, g1}
-      Enum.all?(small, fn {{mr, mc}, x} -> {{2 * r - mr + 1, mc}, x} in big end)
+      count_misses(g1, g2, r) == misses or count_misses(g2, g1, r) == misses
     end)
   end
 
-  def find_reflect_col({map, {_, maxcol}}, ignore \\ nil) do
-    0..(maxcol - 1)
-    |> Enum.filter(&(&1 != ignore))
-    |> Enum.find(fn c ->
-      {g1, g2} = Enum.split_with(map, fn {{_, mc}, _} -> mc > c end)
-      {big, small} = if length(g1) > length(g2), do: {g1, g2}, else: {g2, g1}
-      Enum.all?(small, fn {{mr, mc}, x} -> {{mr, 2 * c - mc + 1}, x} in big end)
-    end)
+
+  def count_misses(small, big, reflect) do
+    Enum.count(small, fn {{r, c}, v} -> {{2 * reflect - r + 1, c}, v} not in big end)
   end
 
-  def maps_with_reflects() do
-    for {map, size} <- input_maps(), do: {map, size, find_reflect({map, size})}
-  end
-
-  def solve1() do
-    for {_map, _size, refl} <- maps_with_reflects(), reduce: 0 do
-      total ->
-        case refl do
-          [row: r] -> total + 100 * (r + 1)
-          [col: c] -> total + (c + 1)
-        end
-    end
-  end
-
-  @swap %{"#" => ".", "." => "#"}
-  def unsmudged(map), do: Stream.map(map, fn {loc, x} -> Map.update!(map, loc, &@swap[&1]) end)
-
-  def solve2 do
-    for {map, size, ignore} <- maps_with_reflects(), reduce: 0 do
-      total ->
-        unsmudged(map)
-        |> Enum.find_value(fn m -> find_reflect({m, size}, ignore) end)
-        |> case do
-          [row: r] -> total + 100 * (r + 1)
-          [col: c] -> total + (c + 1)
-        end
-    end
-  end
+  def solve1(), do: Enum.sum(for map <- input_maps(), do: reflection_score(map))
+  def solve2(), do: Enum.sum(for map <- input_maps(), do: reflection_score(map, 1))
 end
