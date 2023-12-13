@@ -42,8 +42,6 @@ defmodule Aoc2023Ex.Day12 do
     |> Enum.sum()
   end
 
-  def hitcount(line), do: Enum.count(line, &(&1 == @spring))
-
   def count_sols(line, groups) do
     {c, _} = count_sols(line, groups, %{})
     c
@@ -52,18 +50,17 @@ defmodule Aoc2023Ex.Day12 do
   def count_sols(_line = [], _groups = [], memo), do: {1, memo}
   def count_sols(_line = [], _groups, memo), do: {0, memo}
   def count_sols([@spring | rest], [], memo), do: {0, memo}
-  def count_sols([@space | rest], groups, memo), do: count_sols(rest, groups, memo)
   def count_sols([_ | rest], [], memo), do: count_sols(rest, [], memo)
+  def count_sols([@space | rest], groups, memo), do: count_sols(rest, groups, memo)
 
   def count_sols(line = [x | rest], groups = [g | restgroups], memo) do
     group_sum = Enum.sum(groups)
     min_slots_remaining = group_sum + length(groups) - 1
-    hit_count = hitcount(line)
     cond do
       Map.has_key?(memo, {line, groups}) ->
         {Map.get(memo, {line, groups}), memo}
 
-      length(line) < min_slots_remaining or hit_count > group_sum ->
+      length(line) < min_slots_remaining ->
         {0, memo}
 
       x == @spring ->
