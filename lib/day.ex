@@ -160,6 +160,11 @@ defmodule Aoc2023Ex.Day do
           end
 
           def print_row_col_map(map) do
+            row_col_map_to_s(map)
+            |> IO.puts()
+          end
+
+          def row_col_map_to_s(map) do
             kk = Map.keys(map)
             maxx = Enum.max(for {x, y} <- kk, do: x)
             maxy = Enum.max(for {x, y} <- kk, do: y)
@@ -171,7 +176,6 @@ defmodule Aoc2023Ex.Day do
               |> Enum.join()
             end
             |> Enum.join("\n")
-            |> IO.puts()
           end
         end
       ]
