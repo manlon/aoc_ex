@@ -20,56 +20,30 @@ defmodule Aoc2023Ex.Day15 do
     box = hash(lbl)
     lenses = Map.get(acc, box, [])
 
-    {lenses, updated?} =
-      Enum.reduce(lenses, {[], false}, fn {l, fl}, {acc, updated?} ->
-        if l == lbl do
-          {acc ++ [{lbl, val}], true}
-        else
-          {acc ++ [{l, fl}], updated?}
-        end
-      end)
-
-    lenses =
-      if updated? do
-        lenses
-      else
-        lenses ++ [{lbl, val}]
-      end
-
-    Map.put(acc, box, lenses)
+    if idx = Enum.find_index(lenses, fn {l, _fl} -> l == lbl end) do
+      List.update_at(lenses, idx, fn _ -> {lbl, val} end)
+    else
+      lenses ++ [{lbl, val}]
+    end
+    |> then(&Map.put(acc, box, &1))
   end
 
   def process([lbl, "-"], acc) do
-    box = hash(lbl)
-    lenses = Map.get(acc, box, [])
-    lenses = Enum.filter(lenses, fn {l, _fl} -> l != lbl end)
-    Map.put(acc, box, lenses)
+    Map.update(acc, hash(lbl), [], &Enum.filter(&1, fn {l, _fl} -> l != lbl end))
   end
 
   def solve1 do
-    input()
-    |> String.split(",")
-    |> Enum.map(&hash/1)
-    |> Enum.sum()
+    Enum.sum(for(i <- String.split(input(), ","), do: hash(i)))
   end
 
   def solve2 do
-    filt =
-      for x <- Parser.operations(input()), reduce: %{} do
-        acc ->
-          process(x, acc)
-      end
-
-    for {box, lenses} <- filt do
-      score_box(box, lenses)
-    end
-    |>  Enum.sum()
+    boxes = Enum.reduce(Parser.operations(input()), %{}, &process/2)
+    Enum.sum(for {box, lenses} <- boxes, do: score_box(box, lenses))
   end
 
   def score_box(box, lenses) do
     Enum.with_index(lenses, 1)
-    |> Enum.map(fn {{_, fl}, i} -> i * fl end)
-    |> Enum.map(fn x -> (box + 1) * x end)
+    |> Enum.map(fn {{_, fl}, i} -> (box + 1) * i * fl end)
     |> Enum.sum()
   end
 end
