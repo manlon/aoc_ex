@@ -27,41 +27,51 @@ defmodule Aoc2023Ex.Day18 do
   def move({r, c}, "L", n), do: {r, c - n}
   def move({r, c}, "R", n), do: {r, c + n}
 
-  def verticals([[dir, n | _] | moves], loc = {r, c}, acc) do
+  def verticals_and_rows(moves, loc, acc \\ {[], []})
+
+  def verticals_and_rows([[dir, n | _] | moves], loc = {r, c}, {verts, rows}) do
     newloc = move(loc, dir, n)
 
-    newverts =
+    {newverts, newrows} =
       case dir do
         "U" ->
-          [{(r - n)..r, c}]
+          {[{(r - n)..r, c}], []}
 
         "D" ->
-          [{r..(r + n), c}]
+          {[{r..(r + n), c}], []}
 
         _ ->
-          []
+          {[], [r]}
       end
 
-    verticals(moves, newloc, newverts ++ acc)
+    verticals_and_rows(moves, newloc, {newverts ++ verts, newrows ++ rows})
   end
 
-  def verticals([], _loc, acc), do: acc
+  def verticals_and_rows([], _loc, {verts, rows}), do: {verts, Enum.sort(Enum.uniq(rows))}
+
+  def rows_with_surroundings([r], acc), do: Enum.sort(Enum.uniq([r | acc]))
+
+  def rows_with_surroundings([r1, r2 | rest], acc) do
+    acc = [r1, r1 + 1, r2 - 1 | acc]
+    rows_with_surroundings([r2 | rest], acc)
+  end
 
   def count_inside_path(moves) do
     start = {0, 0}
-    verts = verticals(moves, start, [])
-    minrow = Enum.min(for {x.._y, _c} <- verts, do: x)
-    maxrow = Enum.max(for {_x..y, _c} <- verts, do: y)
+    {verts, rows} = verticals_and_rows(moves, start)
+    rows = rows_with_surroundings(rows, [])
+    acc = {_total = 0, _last_row = hd(rows) - 1, _last_row_count = 0}
 
-    for r <- minrow..maxrow, reduce: 0 do
-      acc ->
-        if rem(r, 100_000) == 0 do
-          dbg("row: #{r}")
-        end
+    {total, _, _} =
+      for r <- rows, reduce: acc do
+        {total, last_row, last_row_count} ->
+          hits = Enum.filter(verts, fn {x..y, _c} -> r in x..y end)
+          row_count = count_row(r, hits)
+          total = total + row_count + (r - last_row - 1) * last_row_count
+          {total, r, row_count}
+      end
 
-        hits = Enum.filter(verts, fn {x..y, _c} -> r in x..y end)
-        acc + count_row(r, hits)
-    end
+    total
   end
 
   def count_row(row, verticals) do
