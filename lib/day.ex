@@ -168,9 +168,11 @@ defmodule Aoc2023Ex.Day do
             kk = Map.keys(map)
             maxx = Enum.max(for {x, y} <- kk, do: x)
             maxy = Enum.max(for {x, y} <- kk, do: y)
+            minx = Enum.min(for {x, y} <- kk, do: x)
+            miny = Enum.min(for {x, y} <- kk, do: y)
 
-            for x <- 0..maxx do
-              for y <- 0..maxy do
+            for x <- minx..maxx do
+              for y <- miny..maxy do
                 Map.get(map, {x, y}, " ")
               end
               |> Enum.join()
