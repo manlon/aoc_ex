@@ -21,17 +21,6 @@ defmodule Aoc2023Ex.Day18 do
     end
   end
 
-  @turns %{
-    {"U", "L"} => "7",
-    {"U", "R"} => "F",
-    {"D", "L"} => "J",
-    {"D", "R"} => "L",
-    {"L", "U"} => "L",
-    {"L", "D"} => "F",
-    {"R", "U"} => "J",
-    {"R", "D"} => "7"
-  }
-
   def move(loc, dir, n \\ 1)
   def move({r, c}, "U", n), do: {r - n, c}
   def move({r, c}, "D", n), do: {r + n, c}
@@ -61,8 +50,8 @@ defmodule Aoc2023Ex.Day18 do
   def count_inside_path(moves) do
     start = {0, 0}
     verts = verticals(moves, start, [])
-    minrow = Enum.min(for {x..y, c} <- verts, do: x)
-    maxrow = Enum.max(for {x..y, c} <- verts, do: y)
+    minrow = Enum.min(for {x.._y, _c} <- verts, do: x)
+    maxrow = Enum.max(for {_x..y, _c} <- verts, do: y)
 
     for r <- minrow..maxrow, reduce: 0 do
       acc ->
@@ -70,17 +59,15 @@ defmodule Aoc2023Ex.Day18 do
           dbg("row: #{r}")
         end
 
-        hits = Enum.filter(verts, fn {x..y, c} -> r in x..y end)
+        hits = Enum.filter(verts, fn {x..y, _c} -> r in x..y end)
         acc + count_row(r, hits)
     end
-
-    # {{minrow, mincol}, {maxrow, maxcol}}
   end
 
   def count_row(row, verticals) do
     hits =
-      Enum.filter(verticals, fn {x..y, c} -> row in x..y end)
-      |> Enum.sort_by(fn {x..y, c} -> c end)
+      Enum.filter(verticals, fn {range, _c} -> row in range end)
+      |> Enum.sort_by(fn {_range, c} -> c end)
 
     {ct, false, _} =
       for {x..y, c} <- hits, reduce: {0, false, nil} do
