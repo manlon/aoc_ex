@@ -37,7 +37,7 @@ defmodule Aoc2023Ex.Day07 do
     Enum.max(all_hand_strengths(length(jokers), [@ace | others], others))
   end
 
-  def all_hand_strengths(0, deck, hold_cards), do: [hand_strength(hold_cards)]
+  def all_hand_strengths(0, _deck, hold_cards), do: [hand_strength(hold_cards)]
 
   def all_hand_strengths(n, deck, hold_cards) do
     Stream.flat_map(deck, &all_hand_strengths(n - 1, deck, [&1 | hold_cards]))

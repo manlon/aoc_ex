@@ -49,7 +49,7 @@ defmodule Aoc2023Ex.Day12 do
 
   def count_sols(_line = [], _groups = [], memo), do: {1, memo}
   def count_sols(_line = [], _groups, memo), do: {0, memo}
-  def count_sols([@spring | rest], [], memo), do: {0, memo}
+  def count_sols([@spring | _rest], [], memo), do: {0, memo}
   def count_sols([_ | rest], [], memo), do: count_sols(rest, [], memo)
   def count_sols([@space | rest], groups, memo), do: count_sols(rest, groups, memo)
 

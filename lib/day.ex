@@ -12,7 +12,7 @@ defmodule Aoc2023Ex.Day do
         |> String.replace_prefix("Day", "")
         |> String.to_integer()
 
-      modules =
+      _modules =
         for i <- 1..daynum//1 do
           num =
             Integer.to_string(i)

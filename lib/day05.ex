@@ -11,9 +11,8 @@ defmodule Aoc2023Ex.Day05 do
 
     int_lines = separated(wrap(line_of_ints), istr("\n"))
     map = ignore(map_title) |> concat(int_lines)
-    maps = separated(map, istr("\n\n"))
-
-    input = seeds_line |> istr("\n\n") |> concat(maps)
+    # maps = separated(map, istr("\n\n"))
+    # input = seeds_line |> istr("\n\n") |> concat(maps)
 
     defmatch(:parse_seeds_line, seeds_line)
     defmatch(:parse_map, map)
@@ -52,7 +51,7 @@ defmodule Aoc2023Ex.Day05 do
   end
 
   def map_ranges([], acc), do: acc
-  def map_ranges([{{s, e}, []} | rest], acc), do: map_ranges(rest, Enum.min([s, acc]))
+  def map_ranges([{{s, _e}, []} | rest], acc), do: map_ranges(rest, Enum.min([s, acc]))
   def map_ranges([{r, [[] | maps]} | rest], acc), do: map_ranges([{r, maps} | rest], acc)
 
   def map_ranges([{{s, e}, maps = [[{r = rs..re, d} | mapranges] | nextmaps]} | rest], acc) do
