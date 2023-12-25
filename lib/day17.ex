@@ -1,26 +1,25 @@
 defmodule Aoc2023Ex.Day17 do
   use Aoc2023Ex.Day
 
-  def move(loc, dir, n \\ 1)
-  def move({r, c}, :n, n), do: {r - n, c}
-  def move({r, c}, :e, n), do: {r, c + n}
-  def move({r, c}, :s, n), do: {r + n, c}
-  def move({r, c}, :w, n), do: {r, c - n}
-  @op_dir %{n: :s, s: :n, e: :w, w: :e}
+  @dirs [:north, :east, :south, :west]
+  @op_dirs %{north: :south, east: :west, south: :north, west: :east}
   @start_node {:start, nil, nil}
+  def move(loc, dir, n \\ 1)
+  def move({r, c}, :north, n), do: {r - n, c}
+  def move({r, c}, :east, n), do: {r, c + n}
+  def move({r, c}, :south, n), do: {r + n, c}
+  def move({r, c}, :west, n), do: {r, c - n}
+
   def make_graph(map, size = {maxr, maxc}, max_straight \\ 3, min_straight \\ 1) do
     for r <- 0..maxr,
         c <- 0..maxc,
         n <- 1..max_straight,
-        d_from <- [:n, :s, :e, :w],
-        d_to <- [:n, :s, :e, :w],
-        d_to != @op_dir[d_from],
+        d_from <- @dirs,
+        in_bounds?(size, move({r, c}, @op_dirs[d_from], n)),
+        d_to <- @dirs,
+        d_to != @op_dirs[d_from],
         n < max_straight || d_to != d_from,
         n >= min_straight || d_to == d_from,
-        line_from = move({r, c}, @op_dir[d_from], n),
-        in_bounds?(size, line_from),
-        prev = move({r, c}, @op_dir[d_from]),
-        in_bounds?(size, prev),
         next = move({r, c}, d_to),
         in_bounds?(size, next),
         n_next = if(d_to == d_from, do: n + 1, else: 1),
@@ -31,8 +30,13 @@ defmodule Aoc2023Ex.Day17 do
       acc ->
         Map.update(acc, from, [state], &[state | &1])
     end
-    |> Map.put(@start_node, [{{{1, 0}, 1, :s}, map[{1, 0}]}, {{{0, 1}, 1, :e}, map[{0, 1}]}])
+    |> Map.put(@start_node, [
+      {{{1, 0}, 1, :south}, map[{1, 0}]},
+      {{{0, 1}, 1, :east}, map[{0, 1}]}
+    ])
   end
+
+  def in_bounds?({maxr, maxc}, {r, c}), do: r in 0..maxr and c in 0..maxc
 
   def shortest(graph, nodes, dists, visited, goal) do
     {{curdist, curnode}, nodes} = Heap.split(nodes)
@@ -68,8 +72,6 @@ defmodule Aoc2023Ex.Day17 do
         shortest(graph, nodes, dists, visited, goal)
     end
   end
-
-  def in_bounds?({maxr, maxc}, {r, c}), do: r in 0..maxr and c in 0..maxc
 
   def solve_path(max_straight \\ 3, min_straight \\ 1) do
     {map, size} = input_int_map_with_size()
