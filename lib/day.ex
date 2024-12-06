@@ -35,7 +35,7 @@ defmodule Aoc2023Ex.Day do
           end
 
           def input_file do
-            "input/input#{unquote(module_num)}.txt"
+            "input/2023/input#{unquote(module_num)}.txt"
           end
 
           def input do
