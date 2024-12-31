@@ -60,16 +60,16 @@ defmodule AocEx.Aoc2024Ex.Day09 do
 
       {:value, block} ->
         case block do
-          {:file, i, n} ->
+          {:file, _i, _n} ->
             compactify(q, [block | acc])
 
-          {:free, num_free} ->
+          {:free, _num_free} ->
             compactify_space(q, block, acc)
         end
     end
   end
 
-  def compactify_space(q, block = {:free, 0}, acc) do
+  def compactify_space(q, _block = {:free, 0}, acc) do
     compactify(q, acc)
   end
 
@@ -108,7 +108,7 @@ defmodule AocEx.Aoc2024Ex.Day09 do
       {{:value, block = {:free, _}}, q} ->
         compactify_whole(q, [block | acc])
 
-      {{:value, block = {:file, i, n}}, q} ->
+      {{:value, block = {:file, _i, n}}, q} ->
         if :queue.any(
              fn
                {:free, num_free} -> num_free >= n
@@ -124,7 +124,7 @@ defmodule AocEx.Aoc2024Ex.Day09 do
     end
   end
 
-  def fill_space(q, file_to_move = {:file, i, n}) do
+  def fill_space(q, file_to_move = {:file, _i, n}) do
     :queue.to_list(q)
     |> Enum.reduce({[], false}, fn
       block, {acc, true} ->

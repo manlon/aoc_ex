@@ -197,7 +197,7 @@ defmodule AocEx.Aoc2023Ex.Day20 do
             # for({k, v} <- Enum.sort(v.input_pulses), do: "#{k}=#{v}")
             # |> Enum.join(",")
             input_str =
-              for({k, v} <- Enum.sort(v.input_pulses), do: hilostr(v))
+              for({_k, v} <- Enum.sort(v.input_pulses), do: hilostr(v))
               |> Enum.join("")
 
             "(#{k}:#{input_str})"
@@ -205,7 +205,7 @@ defmodule AocEx.Aoc2023Ex.Day20 do
           # "#{k}:#{input_str};"
 
           @flip ->
-            pref =
+            _pref =
               if k in map["vr"].inputs do
                 ">"
               else

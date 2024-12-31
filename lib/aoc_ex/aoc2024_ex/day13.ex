@@ -16,7 +16,7 @@ defmodule AocEx.Aoc2024Ex.Day13 do
     |> then(fn [[_, x, y]] -> {String.to_integer(x), String.to_integer(y)} end)
   end
 
-  def find_fast(pyld = {{xa, ya}, {xb, yb}, {xF, yF}}) do
+  def find_fast(_pyld = {{xa, ya}, {xb, yb}, {xF, yF}}) do
     num = xa * (yF * xb - xF * yb)
     denom = ya * xb - xa * yb
 

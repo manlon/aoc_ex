@@ -36,7 +36,7 @@ defmodule AocEx.Aoc2023Ex.Day21 do
     stableize(map, froms, 0, %{odd: {0, [], false}, even: {0, [], false}})
   end
 
-  def stableize(_map, _froms, n, results = %{odd: {_, _, true}, even: {_, _, true}}), do: results
+  def stableize(_map, _froms, _n, results = %{odd: {_, _, true}, even: {_, _, true}}), do: results
 
   def stableize(
         map,

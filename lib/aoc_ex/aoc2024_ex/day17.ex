@@ -208,21 +208,7 @@ defmodule AocEx.Aoc2024Ex.Day17 do
   def solve1 do
     # comp = Computer.new(%{"A" => 2024, "B" => 0, "C" => 0}, [0, 1, 5, 4, 3, 0])
     comp = input()
-    {output, _} = Computer.run(comp)
-  end
-
-  def solve2(start \\ 0) do
-    comp = input()
-    # dbg(Computer.prog(comp))
-    # 13800000
-    # detect_quine(comp, start)
-    # heap =
-    #   Heap.new()
-    #   |> Heap.push({0, []})
-
-    heap = [{0, []}]
-
-    grow_until_quine(comp, heap)
+    {_output, _} = Computer.run(comp)
   end
 
   def grow_until_quine(comp, q = [{n, output} | rest]) do
@@ -246,6 +232,9 @@ defmodule AocEx.Aoc2024Ex.Day17 do
       val = shifted + n
       {val, set_reg_and_run(comp, val)}
     end)
-    |> Enum.filter(fn {n, output} -> List.ends_with?(prog, output) end)
+    |> Enum.filter(fn {_n, output} -> List.ends_with?(prog, output) end)
+  end
+
+  def solve2() do
   end
 end

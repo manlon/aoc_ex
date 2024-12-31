@@ -91,7 +91,7 @@ defmodule AocEx.Aoc2023Ex.Day19 do
     |> Enum.sum()
   end
 
-  def split_range(_range = a..b, op, val) do
+  def split_range(_range = a..b//_, op, val) do
     case op do
       "<" ->
         top_bound_lt = min(val - 1, b)

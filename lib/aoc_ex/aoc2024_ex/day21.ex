@@ -7,13 +7,13 @@ defmodule AocEx.Aoc2024Ex.Day21 do
   246A
   """
 
-  @input_ex """
-  029A
-  980A
-  179A
-  456A
-  379A
-  """
+  # @input_ex """
+  # 029A
+  # 980A
+  # 179A
+  # 456A
+  # 379A
+  # """
 
   def input do
     # @input_ex
@@ -25,14 +25,6 @@ defmodule AocEx.Aoc2024Ex.Day21 do
       {line, String.to_integer(num)}
     end)
   end
-
-  @numpad """
-  789
-  456
-  123
-   0A
-  """
-  @numkeys String.split(@numpad) |> Enum.join() |> String.graphemes()
 
   @dirneighbs %{
     "A" => [{"<", "^"}, {"v", ">"}],
@@ -59,11 +51,11 @@ defmodule AocEx.Aoc2024Ex.Day21 do
   def find_paths(map, to, paths) do
     newpaths =
       for path <- paths,
-          [{lastdir, lastnum} | rest] = path,
+          [{_lastdir, lastnum} | _rest] = path,
           nn = map[lastnum],
           move <- nn,
-          {dir, num} = move,
-          prevnums = Enum.map(path, fn {d, n} -> n end),
+          {_dir, num} = move,
+          prevnums = Enum.map(path, fn {_d, n} -> n end),
           num not in prevnums do
         [move | path]
       end
@@ -76,7 +68,7 @@ defmodule AocEx.Aoc2024Ex.Day21 do
         paths
         |> Enum.map(fn path ->
           Enum.reverse(path)
-          |> Enum.map(fn {dir, num} -> dir end)
+          |> Enum.map(fn {dir, _num} -> dir end)
           |> Enum.join()
         end)
     end
@@ -197,7 +189,7 @@ defmodule AocEx.Aoc2024Ex.Day21 do
     num_paths = all_num_paths_c()
     dir_paths = all_dir_paths_c()
 
-    {c, memo} =
+    {_c, _memo} =
       input()
       |> Enum.reduce({0, %{}}, fn {s, n}, {acc, memo} ->
         [seg, ""] = String.split(s, "A")

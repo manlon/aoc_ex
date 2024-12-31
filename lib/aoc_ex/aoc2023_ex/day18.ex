@@ -66,7 +66,7 @@ defmodule AocEx.Aoc2023Ex.Day18 do
     {total, _, _} =
       for r <- rows, reduce: acc do
         {total, last_row, last_row_count} ->
-          hits = Enum.filter(verts, fn {x..y, _c} -> r in x..y end)
+          hits = Enum.filter(verts, fn {x..y//_, _c} -> r in x..y end)
           row_count = count_row(r, hits)
           total = total + row_count + (r - last_row - 1) * last_row_count
           {total, r, row_count}
@@ -81,7 +81,7 @@ defmodule AocEx.Aoc2023Ex.Day18 do
       |> Enum.sort_by(fn {_range, c} -> c end)
 
     {ct, false, _} =
-      for {x..y, c} <- hits, reduce: {0, false, nil} do
+      for {x..y//_, c} <- hits, reduce: {0, false, nil} do
         {ct, insideness, last_col} ->
           # dbg({ct, insideness, last_col})
 

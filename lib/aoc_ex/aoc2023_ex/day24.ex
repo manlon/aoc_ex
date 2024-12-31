@@ -9,16 +9,16 @@ defmodule AocEx.Aoc2023Ex.Day24 do
     defmatch(:parse_line, line)
   end
 
-  def xyisect(p1 = [[x1, y1, z1], [dx1, dy1, dz1]], p2 = [[x2, y2, z2], [dx2, dy2, dz2]]) do
-    # x1 + t * dx1 = y1 + t * dy1
+  # def xyisect(_p1 = [[_x1, y1, z1], [dx1, dy1, dz1]], p2 = [[x2, y2, z2], [dx2, dy2, dz2]]) do
+  # x1 + t * dx1 = y1 + t * dy1
 
-    # x1 - y1 = t * (dy1 - dx1)
+  # x1 - y1 = t * (dy1 - dx1)
 
-    # y = mx + b
-    # y = (dy1/dx1)x + b
-    # y1 = (dy1/dx1)x1 + b
-    # b = y1 - (dy1/dx1)x1
-  end
+  # y = mx + b
+  # y = (dy1/dx1)x + b
+  # y1 = (dy1/dx1)x1 + b
+  # b = y1 - (dy1/dx1)x1
+  # end
 
   def solve1 do
     # x1 + t * dx1 = x2 + t * dx2

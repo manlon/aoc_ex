@@ -2,9 +2,6 @@ defmodule AocEx.Aoc2024Ex.Day24 do
   import Bitwise
   alias Graphvix.Graph
 
-  @example """
-  """
-
   def input do
     AocEx.Day.input_file_contents(2024, 24)
     # @example
@@ -68,14 +65,14 @@ defmodule AocEx.Aoc2024Ex.Day24 do
 
   def solve1 do
     {wires, gates} = input()
-    wires = settle(wires, gates)
+    _wires = settle(wires, gates)
   end
 
   def solve2 do
   end
 
   def graph do
-    {wires, gates} = input()
+    {_wires, gates} = input()
     graph = Graph.new()
 
     all_wires =

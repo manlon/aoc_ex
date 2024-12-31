@@ -18,7 +18,7 @@ defmodule AocEx.Aoc2023Ex.Day22 do
 
   def z, do: Parser.parsed_input()
 
-  def bottom_points(brick = {{x1, y1, z1}, {x2, y2, z2}}) do
+  def bottom_points(_brick = {{x1, y1, z1}, {x2, y2, _z2}}) do
     for x <- x1..x2 do
       for y <- y1..y2 do
         {x, y, z1}
@@ -27,7 +27,7 @@ defmodule AocEx.Aoc2023Ex.Day22 do
     |> List.flatten()
   end
 
-  def lowest(brick = {{_, _, z}, _}), do: z
+  def lowest(_brick = {{_, _, z}, _}), do: z
 
   def fall_point({x, y, z}), do: {x, y, z - 1}
 
@@ -74,11 +74,11 @@ defmodule AocEx.Aoc2023Ex.Day22 do
     Enum.any?(bricks)
   end
 
-  def fall(bricks, settled) do
+  def fall(_bricks, _settled) do
   end
 
   def solve1 do
-    pts =
+    _pts =
       Parser.parsed_input()
       |> then(fn bricks -> lock(bricks, []) end)
   end

@@ -22,7 +22,6 @@ defmodule AocEx.Aoc2024Ex.Day16 do
   @dirs [{-1, 0}, {0, 1}, {1, 0}, {0, -1}]
   @start "S"
   @fin "E"
-  @wall "#"
   @empty "."
   @startdir {0, 1}
   @turncost 1000

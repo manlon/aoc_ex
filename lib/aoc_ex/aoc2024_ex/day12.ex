@@ -56,7 +56,7 @@ defmodule AocEx.Aoc2024Ex.Day12 do
     regions(map, neighbs ++ rest, [loc | cur_region], acc)
   end
 
-  def perim(map, region) do
+  def perim(_map, region) do
     set = MapSet.new(region)
 
     Enum.reduce(region, 0, fn loc, acc ->
@@ -70,22 +70,22 @@ defmodule AocEx.Aoc2024Ex.Day12 do
     end)
   end
 
-  def sides(map, region) do
+  def sides(_map, region) do
     set = MapSet.new(region)
 
     Enum.reduce(region, %{}, fn loc, acc ->
       @dirs
       |> Enum.map(fn dir -> {dir, addpos(loc, dir)} end)
-      |> Enum.filter(fn {dir, next} -> !MapSet.member?(set, next) end)
-      |> Enum.group_by(fn {dir, next} -> dir end)
+      |> Enum.filter(fn {_dir, next} -> !MapSet.member?(set, next) end)
+      |> Enum.group_by(fn {dir, _next} -> dir end)
       |> Enum.reduce(acc, fn {dir, nexts}, acc ->
-        nexts = Enum.map(nexts, fn {dir, next} -> next end)
+        nexts = Enum.map(nexts, fn {_dir, next} -> next end)
         Map.update(acc, dir, nexts, fn x -> nexts ++ x end)
       end)
     end)
     |> Enum.map(fn {dir, locs} -> {dir, Enum.sort_by(locs, &possort(&1, abspos(dir)))} end)
     |> Enum.map(fn {dir, locs} -> {dir, combine_sides(locs)} end)
-    |> Enum.flat_map(fn {dir, locs} -> locs end)
+    |> Enum.flat_map(fn {_dir, locs} -> locs end)
   end
 
   def adjacent?(a, b) do

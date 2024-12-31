@@ -62,12 +62,12 @@ defmodule AocEx.Aoc2024Ex.Day14 do
         inp
         |> Enum.map(fn pair -> tick(pair, i) end)
 
-      q1 = Enum.count(positions, fn {x, y} -> x < midx && y < midy end)
-      q2 = Enum.count(positions, fn {x, y} -> x > midx && y < midy end)
-      q3 = Enum.count(positions, fn {x, y} -> x < midx && y > midy end)
-      q4 = Enum.count(positions, fn {x, y} -> x > midx && y > midy end)
+      _q1 = Enum.count(positions, fn {x, y} -> x < midx && y < midy end)
+      _q2 = Enum.count(positions, fn {x, y} -> x > midx && y < midy end)
+      _q3 = Enum.count(positions, fn {x, y} -> x < midx && y > midy end)
+      _q4 = Enum.count(positions, fn {x, y} -> x > midx && y > midy end)
 
-      mids = Enum.count(positions, fn {x, y} -> x == midx end)
+      _mids = Enum.count(positions, fn {x, _y} -> x == midx end)
       # dbg(mids)
 
       # lefts =

@@ -20,7 +20,7 @@ defmodule AocEx.Aoc2024Ex.Day06 do
   end
 
   def start_state() do
-    {map, maxkey} = input_map_with_size()
+    {map, _maxkey} = input_map_with_size()
     {startpos, _} = Enum.find(map, fn {_, v} -> v == "^" end)
     map = Map.put(map, startpos, ".")
     {map, MapSet.new([{startpos, {-1, 0}}]), startpos}
@@ -61,8 +61,8 @@ defmodule AocEx.Aoc2024Ex.Day06 do
         newmap = Map.put(map, pos, "#")
 
         case walk(newmap, visited, startpos, @dirs) do
-          {:off, visited} -> acc
-          {:loop, visited} -> [pos | acc]
+          {:off, _visited} -> acc
+          {:loop, _visited} -> [pos | acc]
         end
       else
         acc

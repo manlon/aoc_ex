@@ -16,7 +16,7 @@ defmodule AocEx.Aoc2024Ex.Day18 do
       %__MODULE__{mem: MapSet.new(memlocs)}
     end
 
-    def neighbs(m = %__MODULE__{mem: mem, max: {maxx, maxy}}, pt = {x, y}) do
+    def neighbs(_m = %__MODULE__{mem: mem, max: {maxx, maxy}}, pt = {_x, _y}) do
       for d <- @dirs,
           newpt = addpos(pt, d),
           newpt not in mem,

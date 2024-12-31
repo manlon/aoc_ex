@@ -23,7 +23,7 @@ defmodule AocEx.Aoc2024Ex.Day10 do
 
   def addpos({r1, c1}, {r2, c2}), do: {r1 + r2, c1 + c2}
 
-  def hike(map, [], acc), do: acc
+  def hike(_map, [], acc), do: acc
 
   def hike(map, [path = [loc | _] | rest], acc) do
     val = Map.get(map, loc)
@@ -43,7 +43,7 @@ defmodule AocEx.Aoc2024Ex.Day10 do
   end
 
   def reachable_peaks(map, pos) do
-    paths =
+    _paths =
       hike(map, [[pos]], [])
       |> List.flatten()
       |> Enum.filter(fn pos -> Map.get(map, pos) == 9 end)
@@ -52,7 +52,7 @@ defmodule AocEx.Aoc2024Ex.Day10 do
   end
 
   def full_trails(map, pos) do
-    paths =
+    _paths =
       hike(map, [[pos]], [])
       |> Enum.filter(fn path -> Map.get(map, hd(path)) == 9 end)
       |> Enum.count()
@@ -62,8 +62,8 @@ defmodule AocEx.Aoc2024Ex.Day10 do
     {map, _} = input_map_with_size()
 
     starts =
-      Enum.filter(map, fn {p, v} -> v == 0 end)
-      |> Enum.map(fn {p, v} -> p end)
+      Enum.filter(map, fn {_p, v} -> v == 0 end)
+      |> Enum.map(fn {p, _v} -> p end)
 
     Enum.map(starts, fn start -> reachable_peaks(map, start) end)
   end
@@ -72,8 +72,8 @@ defmodule AocEx.Aoc2024Ex.Day10 do
     {map, _} = input_map_with_size()
 
     starts =
-      Enum.filter(map, fn {p, v} -> v == 0 end)
-      |> Enum.map(fn {p, v} -> p end)
+      Enum.filter(map, fn {_p, v} -> v == 0 end)
+      |> Enum.map(fn {p, _v} -> p end)
 
     Enum.map(starts, fn start -> full_trails(map, start) end)
     |> Enum.sum()
