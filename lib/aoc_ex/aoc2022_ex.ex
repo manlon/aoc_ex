@@ -45,34 +45,4 @@ defmodule AocEx.Aoc2022Ex do
 
     :ok
   end
-
-  def make_module(day) do
-    num = String.pad_leading(Integer.to_string(day), 2, "0")
-    mod_name = "Day#{num}"
-    file = "lib/day#{num}.ex"
-
-    if File.exists?(file) do
-      IO.puts("file #{file} already exists, skipping")
-    else
-      src =
-        File.read!("lib/template.ex")
-        |> String.replace("Template", mod_name)
-
-      File.write!(file, src)
-      Code.compile_file(file)
-    end
-  end
-
-  defmacro reload! do
-    IEx.Helpers.recompile()
-
-    for i <- 1..25 do
-      num = String.pad_leading(Integer.to_string(i), 2, "0")
-      mod = Module.concat(Aoc2022Ex, "Day#{num}")
-
-      quote do
-        alias unquote(mod)
-      end
-    end
-  end
 end
