@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day21 do
-  use AocEx.Day, day: 21
+  use AocEx.Day, year: 2023, day: 21
 
   @walkable [".", "S"]
 

@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day01 do
-  use AocEx.Day, day: 1
+  use AocEx.Day, year: 2023, day: 1
 
   def solve1 do
     input_lines()

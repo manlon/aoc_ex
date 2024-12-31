@@ -1,6 +1,6 @@
 defmodule AocEx.Aoc2023Ex.Day02 do
   alias ElixirSense.Core.Parser
-  use AocEx.Day, day: 2
+  use AocEx.Day, year: 2023, day: 2
 
   defmodule Parser do
     use AocEx.Parser

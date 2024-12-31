@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day13 do
-  use AocEx.Day, day: 13
+  use AocEx.Day, year: 2023, day: 13
 
   def input_maps, do: for(s <- stanzas(), do: input_map_with_size(s) |> elem(0))
   def rotate(map), do: for({{r, c}, v} <- map, into: %{}, do: {{c, r}, v})

@@ -6,11 +6,11 @@ defmodule AocEx.Day do
         _ -> raise "using Day module should pass a day number option"
       end
 
-    # year =
-    #   case Keyword.get(opts, :year, nil) do
-    #     year when is_integer(year) -> year
-    #     _ -> raise "using Day module should pass a year number option"
-    #   end
+    year =
+      case Keyword.get(opts, :year, nil) do
+        year when is_integer(year) -> year
+        _ -> raise "using Day module should pass a year number option"
+      end
 
     # mod =
     #   __CALLER__.module
@@ -46,7 +46,7 @@ defmodule AocEx.Day do
         end
 
         def input_file do
-          "input/2023/input#{unquote(module_num)}.txt"
+          "input/#{unquote(year)}/input#{unquote(module_num)}.txt"
         end
 
         def input do

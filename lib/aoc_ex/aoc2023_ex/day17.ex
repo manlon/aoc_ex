@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day17 do
-  use AocEx.Day, day: 17
+  use AocEx.Day, year: 2023, day: 17
 
   @dirs [:north, :east, :south, :west]
   @op_dirs %{north: :south, east: :west, south: :north, west: :east}

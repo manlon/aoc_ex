@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day14 do
-  use AocEx.Day, day: 14
+  use AocEx.Day, year: 2023, day: 14
 
   @rock "O"
   @empty "."

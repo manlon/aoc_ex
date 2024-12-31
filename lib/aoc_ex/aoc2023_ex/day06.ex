@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day06 do
-  use AocEx.Day, day: 6
+  use AocEx.Day, year: 2023, day: 6
 
   defmodule Parser do
     alias AocEx.Aoc2023Ex.Day06

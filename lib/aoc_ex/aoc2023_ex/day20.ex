@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day20 do
-  use AocEx.Day, day: 20
+  use AocEx.Day, year: 2023, day: 20
 
   defmodule Parser do
     use AocEx.Parser

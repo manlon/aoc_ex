@@ -1,5 +1,5 @@
 defmodule AocEx.Aoc2023Ex.Day07 do
-  use AocEx.Day, day: 7
+  use AocEx.Day, year: 2023, day: 7
 
   defmodule Parser do
     @face %{"T" => 10, "J" => 11, "Q" => 12, "K" => 13, "A" => 14}
