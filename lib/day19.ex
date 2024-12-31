@@ -90,7 +90,6 @@ defmodule Aoc2023Ex.Day19 do
     |> Enum.sum()
   end
 
-
   def split_range(_range = a..b, op, val) do
     case op do
       "<" ->

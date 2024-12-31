@@ -56,6 +56,7 @@ defmodule Aoc2023Ex.Day12 do
   def count_sols(line = [x | rest], groups = [g | restgroups], memo) do
     group_sum = Enum.sum(groups)
     min_slots_remaining = group_sum + length(groups) - 1
+
     cond do
       Map.has_key?(memo, {line, groups}) ->
         {Map.get(memo, {line, groups}), memo}

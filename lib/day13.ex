@@ -20,7 +20,6 @@ defmodule Aoc2023Ex.Day13 do
     end)
   end
 
-
   def count_misses(small, big, reflect) do
     Enum.count(small, fn {{r, c}, v} -> {{2 * reflect - r + 1, c}, v} not in big end)
   end

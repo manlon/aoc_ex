@@ -38,6 +38,7 @@ defmodule Aoc2023Ex do
         {:module, mod} ->
           result = apply(mod, :solve_timed, [])
           IO.inspect(day: mod, result: result)
+
         {:error, _err} ->
           IO.inspect("no module #{mod}")
       end
