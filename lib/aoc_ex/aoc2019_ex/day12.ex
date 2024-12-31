@@ -43,7 +43,7 @@ defmodule AocEx.Aoc2019Ex.Day12 do
     [[a, b]]
   end
 
-  def pairs([a]) do
+  def pairs([_a]) do
     nil
   end
 
@@ -65,7 +65,7 @@ defmodule AocEx.Aoc2019Ex.Day12 do
   end
 
   def one_coord(moons, i) do
-    Enum.reduce(moons, %{}, fn {idx, {p, v}}, acc ->
+    Enum.reduce(moons, %{}, fn {idx, {p, _v}}, acc ->
       Map.put(acc, idx, {[Enum.at(p, i)], [0]})
     end)
   end
@@ -147,7 +147,7 @@ defmodule AocEx.Aoc2019Ex.Day12 do
 
   def add_gravity_from(m1, m2) do
     {p1, v1} = m1
-    {p2, v2} = m2
+    {p2, _v2} = m2
     delta = compare_positions(p1, p2)
     new_v = add_tuples(v1, delta)
     {p1, new_v}

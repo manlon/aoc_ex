@@ -284,7 +284,7 @@ defmodule AocEx.Aoc2019Ex.Day15 do
           else
             Map.get(map, {x, y}, {" ", []})
             |> case do
-              {chr, path} ->
+              {chr, _path} ->
                 chr
 
               chr ->
@@ -340,7 +340,7 @@ defmodule AocEx.Aoc2019Ex.Day15 do
 
   def run_until_wait(program, pointer, inputs, outputs, r, processed_inputs, robot, map) do
     case run_program(program, pointer, inputs, outputs, r, processed_inputs) do
-      {:wait, prog, i, outputs, r, processed_inputs} ->
+      {:wait, _prog, _i, _outputs, _r, _processed_inputs} ->
         {robot, map}
 
       {:cont, prog, i, inputs, [output], r, processed_inputs} ->
@@ -372,7 +372,7 @@ defmodule AocEx.Aoc2019Ex.Day15 do
   end
 
   def read_values(program, codes, modes, relative_offset) do
-    List.zip([codes, modes])
+    Enum.zip([codes, modes])
     |> Enum.map(fn {code, mode} ->
       case mode do
         0 ->
@@ -403,7 +403,7 @@ defmodule AocEx.Aoc2019Ex.Day15 do
 
   def args(program, i, modes, relative_offset) do
     [p1, p2] = get_chunk(program, i + 1, 2)
-    [v1, v2] = read_values(program, [p1, p2], modes, relative_offset)
+    [_v1, _v2] = read_values(program, [p1, p2], modes, relative_offset)
   end
 
   def take_inputs(inputs) do
@@ -442,10 +442,10 @@ defmodule AocEx.Aoc2019Ex.Day15 do
   }
 
   def run_program(program, i, inputs, outputs, relative_offset, last_input) do
-    [instruction, c1, c2, c3] = get_chunk(program, i, 4)
+    [instruction, c1, _c2, c3] = get_chunk(program, i, 4)
     {op, modes} = decompose_op(instruction)
 
-    opname = @codenames[op]
+    _opname = @codenames[op]
 
     [a1, a2, a3] =
       case op do

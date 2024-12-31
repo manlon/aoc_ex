@@ -59,12 +59,12 @@ defmodule AocEx.Aoc2019Ex.Day13 do
     else
       maxx =
         Map.keys(board)
-        |> Enum.map(fn {x, y} -> x end)
+        |> Enum.map(fn {x, _y} -> x end)
         |> Enum.max()
 
       maxy =
         Map.keys(board)
-        |> Enum.map(fn {x, y} -> y end)
+        |> Enum.map(fn {_x, y} -> y end)
         |> Enum.max()
 
       0..maxy
@@ -72,7 +72,7 @@ defmodule AocEx.Aoc2019Ex.Day13 do
         0..maxx
         |> Enum.map(fn x ->
           i = Map.get(board, {x, y}, 0)
-          char = Map.get(@display_char, i, Integer.to_string(i))
+          _char = Map.get(@display_char, i, Integer.to_string(i))
         end)
         |> Enum.join()
       end)
@@ -83,7 +83,7 @@ defmodule AocEx.Aoc2019Ex.Day13 do
     end
   end
 
-  def apply_outputs(outputs, game = {board, score}) do
+  def apply_outputs(outputs, game = {_board, _score}) do
     outputs
     |> Enum.chunk_every(3)
     |> Enum.reduce({game, []}, fn tile, {{board, score}, _} ->
@@ -120,7 +120,7 @@ defmodule AocEx.Aoc2019Ex.Day13 do
     case run_program(program, pointer, inputs, outputs, relative_offset, game) do
       {:stop, _, _, _, outputs, _} ->
         [outputs, game]
-        {game, outputs} = apply_outputs(outputs, game)
+        {game, _outputs} = apply_outputs(outputs, game)
         print_game(game)
         game
 
@@ -173,7 +173,7 @@ defmodule AocEx.Aoc2019Ex.Day13 do
   end
 
   def read_values(program, codes, modes, relative_offset) do
-    List.zip([codes, modes])
+    Enum.zip([codes, modes])
     |> Enum.map(fn {code, mode} ->
       case mode do
         0 ->
@@ -204,7 +204,7 @@ defmodule AocEx.Aoc2019Ex.Day13 do
 
   def args(program, i, modes, relative_offset) do
     [p1, p2] = get_chunk(program, i + 1, 2)
-    [v1, v2] = read_values(program, [p1, p2], modes, relative_offset)
+    [_v1, _v2] = read_values(program, [p1, p2], modes, relative_offset)
   end
 
   def take_inputs(inputs) do
@@ -244,10 +244,10 @@ defmodule AocEx.Aoc2019Ex.Day13 do
   }
 
   def run_program(program, i, inputs, outputs, relative_offset, game) do
-    [instruction, c1, c2, c3] = get_chunk(program, i, 4)
+    [instruction, c1, _c2, c3] = get_chunk(program, i, 4)
     {op, modes} = decompose_op(instruction)
 
-    opname = @codenames[op]
+    _opname = @codenames[op]
 
     [a1, a2, a3] =
       case op do

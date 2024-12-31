@@ -149,7 +149,7 @@ defmodule AocEx.Aoc2019Ex.Day25 do
   # }
 
   def read_values(program, codes, modes, relative_offset) do
-    List.zip([codes, modes])
+    Enum.zip([codes, modes])
     |> Enum.map(fn {code, mode} ->
       case mode do
         0 ->
@@ -180,7 +180,7 @@ defmodule AocEx.Aoc2019Ex.Day25 do
 
   def args(program, i, modes, relative_offset) do
     [p1, p2] = get_chunk(program, i + 1, 2)
-    [v1, v2] = read_values(program, [p1, p2], modes, relative_offset)
+    [_v1, _v2] = read_values(program, [p1, p2], modes, relative_offset)
   end
 
   def take_inputs(inputs) do

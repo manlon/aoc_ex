@@ -28,7 +28,7 @@ defmodule AocEx.Aoc2019Ex.Day23 do
 
   def tick(node_states), do: tick(node_states, 0, nil)
 
-  def tick(node_states, ticks, last_nat) do
+  def tick(node_states, _ticks, last_nat) do
     idle? = idle?(node_states)
 
     {node_states, nat_delivered} =

@@ -1,6 +1,5 @@
 defmodule AocEx.Aoc2015Ex.Day17 do
   use AocEx.Day, year: 2015, day: 17
-  alias AocEx.Combos
   import Enum, only: [count: 1]
 
   def solve1 do

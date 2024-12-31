@@ -246,7 +246,7 @@ defmodule AocEx.Aoc2019Ex.Day17 do
   end
 
   def read_values(program, codes, modes, relative_offset) do
-    List.zip([codes, modes])
+    Enum.zip([codes, modes])
     |> Enum.map(fn {code, mode} ->
       case mode do
         0 ->

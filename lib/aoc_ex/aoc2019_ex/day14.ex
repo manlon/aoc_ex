@@ -58,7 +58,7 @@ defmodule AocEx.Aoc2019Ex.Day14 do
 
   @trillion 1_000_000_000_000
 
-  def ddd(inp, i, last_try) do
+  def ddd(inp, i, _last_try) do
     ore = ore_for(inp, i)
 
     if ore < @trillion do

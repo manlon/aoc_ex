@@ -243,10 +243,10 @@ defmodule AocEx.Aoc2019Ex.Day11 do
   }
 
   def run_program(program, i, inputs, outputs, relative_offset) do
-    [instruction, c1, c2, c3] = get_chunk(program, i, 4)
+    [instruction, c1, _c2, c3] = get_chunk(program, i, 4)
     {op, modes} = decompose_op(instruction)
 
-    opname = @codenames[op]
+    _opname = @codenames[op]
 
     [a1, a2, a3] =
       case op do

@@ -118,7 +118,7 @@ defmodule AocEx.Aoc2019Ex.Day19 do
   # }
 
   def read_values(program, codes, modes, relative_offset) do
-    List.zip([codes, modes])
+    Enum.zip([codes, modes])
     |> Enum.map(fn {code, mode} ->
       case mode do
         0 ->
@@ -149,7 +149,7 @@ defmodule AocEx.Aoc2019Ex.Day19 do
 
   def args(program, i, modes, relative_offset) do
     [p1, p2] = get_chunk(program, i + 1, 2)
-    [v1, v2] = read_values(program, [p1, p2], modes, relative_offset)
+    [_v1, _v2] = read_values(program, [p1, p2], modes, relative_offset)
   end
 
   def take_inputs(inputs) do
@@ -200,7 +200,7 @@ defmodule AocEx.Aoc2019Ex.Day19 do
 
   def run_until_wait(program, pointer, inputs, outputs, r, processed_inputs) do
     case run_program(program, pointer, inputs, outputs, r, processed_inputs) do
-      {:wait, prog, i, outputs, r, processed_inputs} = w ->
+      {:wait, _prog, _i, _outputs, _r, _processed_inputs} = w ->
         w
 
       {:cont, prog, i, inputs, outputs, r, processed_inputs} ->
@@ -212,7 +212,7 @@ defmodule AocEx.Aoc2019Ex.Day19 do
   end
 
   def run_program(program, i, inputs, outputs, relative_offset, last_input) do
-    [instruction, c1, c2, c3] = get_chunk(program, i, 4)
+    [instruction, c1, _c2, c3] = get_chunk(program, i, 4)
     {op, modes} = decompose_op(instruction)
 
     # opname = @codenames[op]
