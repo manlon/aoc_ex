@@ -193,4 +193,13 @@ defmodule AocEx.Day do
       end
     ]
   end
+
+  def input_file_name(year, day) do
+    "input/#{year}/input#{String.pad_leading(Integer.to_string(day), 2, "0")}.txt"
+  end
+
+  def input_file_contents(year, day) do
+    File.read!(input_file_name(year, day))
+    |> String.trim("\n")
+  end
 end
