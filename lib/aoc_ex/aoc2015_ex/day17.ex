@@ -1,0 +1,26 @@
+defmodule AocEx.Aoc2015Ex.Day17 do
+  use AocEx.Day, year: 2015, day: 17
+  alias AocEx.Combos
+  import Enum, only: [count: 1]
+
+  def solve1 do
+    subsets(input_ints())
+    |> Stream.filter(&(Enum.sum(&1) == 150))
+    |> count()
+  end
+
+  def solve2 do
+    subsets(input_ints())
+    |> Stream.filter(&(Enum.sum(&1) == 150))
+    |> Stream.map(&length/1)
+    |> Enum.frequencies()
+    |> Enum.sort()
+    |> hd()
+    |> elem(1)
+  end
+
+  def subsets(seq) do
+    Stream.map(count(seq)..0//-1, &Combos.combo_stream(seq, &1))
+    |> Stream.concat()
+  end
+end

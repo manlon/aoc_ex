@@ -144,7 +144,7 @@ defmodule AocEx.Day do
         end
 
         def line_ints(line) do
-          String.split(line, [" ", ",", "=", ":"])
+          String.split(line, [" ", ",", "=", ":", "x", "[", "]", "{", "}"])
           |> Enum.map(&Integer.parse/1)
           |> Enum.filter(fn i -> i != :error end)
           |> Enum.map(fn {i, _} -> i end)
@@ -152,6 +152,11 @@ defmodule AocEx.Day do
 
         def four_neighbors({r, c}) do
           [{0, 1}, {0, -1}, {1, 0}, {-1, 0}]
+          |> Enum.map(fn {dr, dc} -> {r + dr, c + dc} end)
+        end
+
+        def eight_neighbors({r, c}) do
+          [{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}]
           |> Enum.map(fn {dr, dc} -> {r + dr, c + dc} end)
         end
 
