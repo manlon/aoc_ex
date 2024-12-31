@@ -2,6 +2,7 @@ defmodule AocEx.Aoc2023Ex.Day18 do
   use AocEx.Day, day: 18
 
   defmodule Parser do
+    alias AocEx.Aoc2023Ex.Day18
     use AocEx.Parser
     dir = choice([string("R"), string("L"), string("U"), string("D")])
     color = istr("(#") |> ascii_string([?a..?f, ?0..?9], 6) |> istr(")")
@@ -14,7 +15,7 @@ defmodule AocEx.Aoc2023Ex.Day18 do
     end
 
     def parsed_input() do
-      for l <- Aoc2023Ex.Day18.input_lines() do
+      for l <- Day18.input_lines() do
         [dir, n, color] = parse_line(l)
         [dir, n, parse_big_inst(color)]
       end

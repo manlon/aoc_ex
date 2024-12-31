@@ -2,8 +2,9 @@ defmodule AocEx.Aoc2023Ex.Day20 do
   use AocEx.Day, day: 20
 
   defmodule Parser do
-    @bcast "broadcaster"
     use AocEx.Parser
+    alias AocEx.Aoc2023Ex.Day20
+    @bcast "broadcaster"
     module_name = ascii_string([?a..?z], 2)
     type = ascii_string([?&, ?%], 1)
     module = choice([string(@bcast) |> replace(["b", @bcast]), wrap(concat(type, module_name))])
@@ -11,7 +12,7 @@ defmodule AocEx.Aoc2023Ex.Day20 do
     line = module |> istr(" -> ") |> concat(module_list)
     defmatch(:parse_line, line)
 
-    def parsed_lines, do: Aoc2023Ex.Day20.input_lines() |> Enum.map(&parse_line/1)
+    def parsed_lines, do: Day20.input_lines() |> Enum.map(&parse_line/1)
 
     def parsed_input do
       for [[typ, name], dests] <- parsed_lines(), reduce: %{} do

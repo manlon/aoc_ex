@@ -2,13 +2,14 @@ defmodule AocEx.Aoc2023Ex.Day22 do
   use AocEx.Day, day: 22
 
   defmodule Parser do
+    alias AocEx.Aoc2023Ex.Day22
     use AocEx.Parser
     brick = int() |> istr(",") |> int() |> istr(",") |> int()
     line = wrap(brick) |> istr("~") |> wrap(brick)
     defmatch(:parse_line, line)
 
     def parsed_input do
-      Aoc2023Ex.Day22.input_lines()
+      Day22.input_lines()
       |> Enum.map(&parse_line/1)
       |> Enum.map(&Enum.map(&1, fn x -> List.to_tuple(x) end))
       |> Enum.map(&List.to_tuple/1)

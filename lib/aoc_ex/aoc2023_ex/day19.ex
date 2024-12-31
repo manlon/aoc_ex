@@ -3,6 +3,7 @@ defmodule AocEx.Aoc2023Ex.Day19 do
 
   defmodule Parser do
     use AocEx.Parser
+    alias AocEx.Aoc2023Ex.Day19
 
     op = choice([string("<"), string(">")])
     val = choice([string("x"), string("m"), string("a"), string("s")])
@@ -42,7 +43,7 @@ defmodule AocEx.Aoc2023Ex.Day19 do
     defmatch(:parse_part, part)
 
     def parsed_input(inp \\ nil) do
-      [flows, parts] = inp || Aoc2023Ex.Day19.stanza_lines()
+      [flows, parts] = inp || Day19.stanza_lines()
 
       flows =
         for flow <- flows, into: %{} do
