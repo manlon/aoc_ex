@@ -12,26 +12,6 @@ defmodule AocEx.Day do
         _ -> raise "using Day module should pass a year number option"
       end
 
-    # mod =
-    #   __CALLER__.module
-    #   |> Atom.to_string()
-    #   |> String.split(".")
-    #   |> List.last()
-
-    # daynum =
-    #   mod
-    #   |> String.replace_prefix("Day", "")
-    #   |> String.to_integer()
-
-    # _modules =
-    #   for i <- 1..daynum//1 do
-    #     num =
-    #       Integer.to_string(i)
-    #       |> String.pad_leading(2, "0")
-
-    #     Module.concat(Aoc2023Ex, "Day#{num}")
-    #   end
-
     module_num = String.pad_leading(Integer.to_string(day), 2, "0")
 
     [
