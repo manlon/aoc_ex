@@ -18,9 +18,4 @@ defmodule AocEx.Aoc2015Ex.Day17 do
     |> hd()
     |> elem(1)
   end
-
-  def subsets(seq) do
-    Stream.map(count(seq)..0//-1, &Combos.combo_stream(seq, &1))
-    |> Stream.concat()
-  end
 end

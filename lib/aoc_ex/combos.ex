@@ -37,4 +37,9 @@ defmodule AocEx.Combos do
   def combos(_, 0), do: [[]]
   def combos([], _), do: []
   def combos([h | t], m), do: for(l <- combos(t, m - 1), do: [h | l]) ++ combos(t, m)
+
+  def subsets(seq) do
+    Stream.map(Enum.count(seq)..0//-1, &combo_stream(seq, &1))
+    |> Stream.concat()
+  end
 end
