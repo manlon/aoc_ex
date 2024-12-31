@@ -46,7 +46,7 @@ defmodule AocEx.Aoc2023Ex do
     :ok
   end
 
-  def make_module(day) do
+  def make_module(year, day) do
     num = String.pad_leading(Integer.to_string(day), 2, "0")
     mod_name = "Day#{num}"
     file = "lib/day#{num}.ex"
@@ -58,6 +58,7 @@ defmodule AocEx.Aoc2023Ex do
         File.read!("lib/template.ex")
         |> String.replace("Template", mod_name)
         |> String.replace("000", num)
+        |> String.replace("9999", "#{year}")
 
       File.write!(file, src)
       Code.compile_file(file)

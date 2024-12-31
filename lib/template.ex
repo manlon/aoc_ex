@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Template do
-  use AocEx.Day, day: 000
+  use AocEx.Day, year: 9999, day: 000
 
   def solve1 do
     :ok
