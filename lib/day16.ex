@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day16 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 16
 
   @dirs %{up: {-1, 0}, down: {1, 0}, left: {0, -1}, right: {0, 1}}
   @reflections %{

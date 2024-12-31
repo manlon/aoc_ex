@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day09 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 9
 
   def expand([]), do: {0, 0}
 

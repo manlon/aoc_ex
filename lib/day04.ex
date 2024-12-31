@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day04 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 4
 
   defmodule Parser do
     use Aoc2023Ex.Parser

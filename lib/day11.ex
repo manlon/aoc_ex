@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day11 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 11
   @space "."
   @galaxy "#"
 

@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day10 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 10
 
   @directions [north: {-1, 0}, east: {0, 1}, south: {1, 0}, west: {0, -1}]
 

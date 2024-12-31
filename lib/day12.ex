@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day12 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 12
 
   @spring "#"
   @space "."

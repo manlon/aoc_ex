@@ -1,5 +1,5 @@
 defmodule Aoc2023Ex.Day20 do
-  use Aoc2023Ex.Day
+  use Aoc2023Ex.Day, day: 20
 
   defmodule Parser do
     @bcast "broadcaster"

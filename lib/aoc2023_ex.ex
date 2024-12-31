@@ -2,7 +2,6 @@ defmodule Aoc2023Ex do
   @moduledoc """
   Documentation for `Aoc2023Ex`.
   """
-  use Aoc2023Ex.Day
 
   def solve_all do
     [
@@ -58,6 +57,7 @@ defmodule Aoc2023Ex do
       src =
         File.read!("lib/template.ex")
         |> String.replace("Template", mod_name)
+        |> String.replace("000", num)
 
       File.write!(file, src)
       Code.compile_file(file)
