@@ -1,4 +1,4 @@
-defmodule Aoc2023Ex.Day do
+defmodule AocEx.Day do
   defmacro __using__(opts) do
     day =
       case Keyword.get(opts, :day, nil) do
@@ -36,7 +36,7 @@ defmodule Aoc2023Ex.Day do
 
     [
       quote do
-        import Aoc2023Ex.Combos
+        import AocEx.Combos
         def solve, do: {solve1(), solve2()}
 
         def solve_timed do

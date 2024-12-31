@@ -1,11 +1,11 @@
-defmodule Aoc2023Ex.Day07 do
-  use Aoc2023Ex.Day, day: 7
+defmodule AocEx.Aoc2023Ex.Day07 do
+  use AocEx.Day, day: 7
 
   defmodule Parser do
     @face %{"T" => 10, "J" => 11, "Q" => 12, "K" => 13, "A" => 14}
     @face_jok %{@face | "J" => 0}
     def parsed_input(ranks \\ @face) do
-      for line <- Aoc2023Ex.Day07.input_lines(),
+      for line <- AocEx.Aoc2023Ex.Day07.input_lines(),
           [hand, num] = String.split(line),
           num = String.to_integer(num),
           hand = Enum.map(String.graphemes(hand), &(ranks[&1] || String.to_integer(&1))) do

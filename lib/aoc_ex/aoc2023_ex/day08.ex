@@ -1,8 +1,9 @@
-defmodule Aoc2023Ex.Day08 do
-  use Aoc2023Ex.Day, day: 8
+defmodule AocEx.Aoc2023Ex.Day08 do
+  use AocEx.Day, day: 8
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    alias AocEx.Aoc2023Ex.Day08
+    use AocEx.Parser
     dirs = choice([string("L"), string("R")])
     dirline = wrap(repeat(dirs))
     node = ascii_string([?A..?Z], 3)
@@ -11,7 +12,7 @@ defmodule Aoc2023Ex.Day08 do
     defmatch(:parse, input)
 
     def parsed_input() do
-      [dirs, nodes] = parse(Aoc2023Ex.Day08.input())
+      [dirs, nodes] = parse(Day08.input())
 
       nodes =
         for [n, [l, r]] <- nodes, into: %{} do

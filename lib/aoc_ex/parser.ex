@@ -1,4 +1,4 @@
-defmodule Aoc2023Ex.Parser do
+defmodule AocEx.Parser do
   defmodule ParseHelp do
     import NimbleParsec
 
@@ -26,7 +26,7 @@ defmodule Aoc2023Ex.Parser do
   defmacro __using__(_opts) do
     quote do
       import NimbleParsec
-      import Aoc2023Ex.Parser.ParseHelp
+      import AocEx.Parser.ParseHelp
     end
   end
 end

@@ -1,8 +1,8 @@
-defmodule Aoc2023Ex.Day19 do
-  use Aoc2023Ex.Day, day: 19
+defmodule AocEx.Aoc2023Ex.Day19 do
+  use AocEx.Day, day: 19
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
 
     op = choice([string("<"), string(">")])
     val = choice([string("x"), string("m"), string("a"), string("s")])

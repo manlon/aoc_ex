@@ -1,13 +1,13 @@
-defmodule Aoc2023Ex.Day04 do
-  use Aoc2023Ex.Day, day: 4
+defmodule AocEx.Aoc2023Ex.Day04 do
+  use AocEx.Day, day: 4
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     nums = repeat(ispace() |> int())
     halves = wrap(nums) |> istr(" |") |> wrap(nums)
     line = istr("Card") |> ispace() |> int() |> istr(":") |> concat(halves)
     defmatch(:parse_line, line)
-    def parsed_lines, do: Enum.map(Aoc2023Ex.Day04.input_lines(), &parse_line/1)
+    def parsed_lines, do: Enum.map(AocEx.Aoc2023Ex.Day04.input_lines(), &parse_line/1)
   end
 
   def solve1 do

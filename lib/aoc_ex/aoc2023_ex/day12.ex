@@ -1,19 +1,20 @@
-defmodule Aoc2023Ex.Day12 do
-  use Aoc2023Ex.Day, day: 12
+defmodule AocEx.Aoc2023Ex.Day12 do
+  use AocEx.Day, day: 12
 
   @spring "#"
   @space "."
   @unknown "?"
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    alias AocEx.Aoc2023Ex.Day12
+    use AocEx.Parser
     item = ascii_string([??, ?#, ?.], 1)
     int_list = wrap(int() |> repeat(concat(istr(","), int())))
     line = wrap(times(item, min: 1)) |> ispace() |> concat(int_list)
     defmatch(:parse_line, line)
 
     def parsed do
-      Aoc2023Ex.Day12.input_lines() |> Enum.map(&parse_line/1)
+      Day12.input_lines() |> Enum.map(&parse_line/1)
     end
   end
 

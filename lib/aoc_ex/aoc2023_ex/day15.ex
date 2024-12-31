@@ -1,8 +1,8 @@
-defmodule Aoc2023Ex.Day15 do
-  use Aoc2023Ex.Day, day: 15
+defmodule AocEx.Aoc2023Ex.Day15 do
+  use AocEx.Day, day: 15
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     label = ascii_string([?a..?z], min: 1)
     predicate = choice([string("=") |> int(), string("-")])
     defmatch(:operations, separated(wrap(concat(label, predicate)), istr(",")))

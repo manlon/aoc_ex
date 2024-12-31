@@ -1,4 +1,4 @@
-defmodule Aoc2023Ex.Combos do
+defmodule AocEx.Combos do
   import Stream, only: [drop: 2, transform: 3, map: 2]
   import Enum, only: [take: 2, empty?: 1]
 

@@ -1,9 +1,9 @@
-defmodule Aoc2023Ex.Day20 do
-  use Aoc2023Ex.Day, day: 20
+defmodule AocEx.Aoc2023Ex.Day20 do
+  use AocEx.Day, day: 20
 
   defmodule Parser do
     @bcast "broadcaster"
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     module_name = ascii_string([?a..?z], 2)
     type = ascii_string([?&, ?%], 1)
     module = choice([string(@bcast) |> replace(["b", @bcast]), wrap(concat(type, module_name))])

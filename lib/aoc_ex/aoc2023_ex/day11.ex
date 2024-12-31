@@ -1,5 +1,5 @@
-defmodule Aoc2023Ex.Day11 do
-  use Aoc2023Ex.Day, day: 11
+defmodule AocEx.Aoc2023Ex.Day11 do
+  use AocEx.Day, day: 11
   @space "."
   @galaxy "#"
 
@@ -32,7 +32,7 @@ defmodule Aoc2023Ex.Day11 do
     blanks = find_blanks(map, size)
     galaxies = for {pos, @galaxy} <- map, do: pos
 
-    Aoc2023Ex.Combos.pairs(galaxies)
+    AocEx.Combos.pairs(galaxies)
     |> Stream.map(fn [g1, g2] -> dist_with_blanks(g1, g2, blanks, gap_expansion) end)
     |> Enum.sum()
   end

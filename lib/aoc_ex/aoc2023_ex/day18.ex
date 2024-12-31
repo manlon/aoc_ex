@@ -1,8 +1,8 @@
-defmodule Aoc2023Ex.Day18 do
-  use Aoc2023Ex.Day, day: 18
+defmodule AocEx.Aoc2023Ex.Day18 do
+  use AocEx.Day, day: 18
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     dir = choice([string("R"), string("L"), string("U"), string("D")])
     color = istr("(#") |> ascii_string([?a..?f, ?0..?9], 6) |> istr(")")
     line = dir |> ispace() |> int() |> ispace() |> concat(color)

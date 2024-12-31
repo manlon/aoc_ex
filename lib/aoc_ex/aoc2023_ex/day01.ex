@@ -1,5 +1,5 @@
-defmodule Aoc2023Ex.Day01 do
-  use Aoc2023Ex.Day, day: 1
+defmodule AocEx.Aoc2023Ex.Day01 do
+  use AocEx.Day, day: 1
 
   def solve1 do
     input_lines()

@@ -1,9 +1,9 @@
-defmodule Aoc2023Ex.Day02 do
+defmodule AocEx.Aoc2023Ex.Day02 do
   alias ElixirSense.Core.Parser
-  use Aoc2023Ex.Day, day: 2
+  use AocEx.Day, day: 2
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     colors = choice([string("red"), string("green"), string("blue")])
     color_count = wrap(int() |> ispace() |> concat(colors))
     clause = wrap(color_count |> repeat(concat(istr(", "), color_count)))

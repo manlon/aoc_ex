@@ -1,8 +1,8 @@
-defmodule Aoc2023Ex.Day22 do
-  use Aoc2023Ex.Day, day: 22
+defmodule AocEx.Aoc2023Ex.Day22 do
+  use AocEx.Day, day: 22
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     brick = int() |> istr(",") |> int() |> istr(",") |> int()
     line = wrap(brick) |> istr("~") |> wrap(brick)
     defmatch(:parse_line, line)

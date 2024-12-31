@@ -1,35 +1,35 @@
-defmodule Aoc2023Ex do
+defmodule AocEx.Aoc2023Ex do
   @moduledoc """
   Documentation for `Aoc2023Ex`.
   """
 
   def solve_all do
     [
-      Aoc2023Ex.Day01,
-      Aoc2023Ex.Day02,
-      Aoc2023Ex.Day03,
-      Aoc2023Ex.Day04,
-      Aoc2023Ex.Day05,
-      Aoc2023Ex.Day06,
-      Aoc2023Ex.Day07,
-      Aoc2023Ex.Day08,
-      Aoc2023Ex.Day09,
-      Aoc2023Ex.Day10,
-      Aoc2023Ex.Day11,
-      Aoc2023Ex.Day12,
-      Aoc2023Ex.Day13,
-      Aoc2023Ex.Day14,
-      Aoc2023Ex.Day15,
-      Aoc2023Ex.Day16,
-      Aoc2023Ex.Day17,
-      Aoc2023Ex.Day18,
-      Aoc2023Ex.Day19,
-      Aoc2023Ex.Day20,
-      Aoc2023Ex.Day21,
-      Aoc2023Ex.Day22,
-      Aoc2023Ex.Day23,
-      Aoc2023Ex.Day24,
-      Aoc2023Ex.Day25
+      AocEx.Aoc2023Ex.Day01,
+      AocEx.Aoc2023Ex.Day02,
+      AocEx.Aoc2023Ex.Day03,
+      AocEx.Aoc2023Ex.Day04,
+      AocEx.Aoc2023Ex.Day05,
+      AocEx.Aoc2023Ex.Day06,
+      AocEx.Aoc2023Ex.Day07,
+      AocEx.Aoc2023Ex.Day08,
+      AocEx.Aoc2023Ex.Day09,
+      AocEx.Aoc2023Ex.Day10,
+      AocEx.Aoc2023Ex.Day11,
+      AocEx.Aoc2023Ex.Day12,
+      AocEx.Aoc2023Ex.Day13,
+      AocEx.Aoc2023Ex.Day14,
+      AocEx.Aoc2023Ex.Day15,
+      AocEx.Aoc2023Ex.Day16,
+      AocEx.Aoc2023Ex.Day17,
+      AocEx.Aoc2023Ex.Day18,
+      AocEx.Aoc2023Ex.Day19,
+      AocEx.Aoc2023Ex.Day20,
+      AocEx.Aoc2023Ex.Day21,
+      AocEx.Aoc2023Ex.Day22,
+      AocEx.Aoc2023Ex.Day23,
+      AocEx.Aoc2023Ex.Day24,
+      AocEx.Aoc2023Ex.Day25
     ]
     # |> Enum.filter(fn mod -> :code.module_status(mod) == :loaded end)
     |> Enum.map(fn mod ->
@@ -69,7 +69,7 @@ defmodule Aoc2023Ex do
 
     for i <- 1..25 do
       num = String.pad_leading(Integer.to_string(i), 2, "0")
-      mod = Module.concat(Aoc2023Ex, "Day#{num}")
+      mod = Module.concat(AocEx.Aoc2023Ex, "Day#{num}")
 
       quote do
         alias unquote(mod)

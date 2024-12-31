@@ -1,8 +1,8 @@
-defmodule Aoc2023Ex.Day05 do
-  use Aoc2023Ex.Day, day: 5
+defmodule AocEx.Aoc2023Ex.Day05 do
+  use AocEx.Day, day: 5
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
 
     line_of_ints = repeat(int() |> ispace()) |> int()
     seeds_line = istr("seeds: ") |> concat(line_of_ints)

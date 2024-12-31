@@ -1,5 +1,5 @@
-defmodule Aoc2023Ex.Day03 do
-  use Aoc2023Ex.Day, day: 3
+defmodule AocEx.Aoc2023Ex.Day03 do
+  use AocEx.Day, day: 3
 
   @nums ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
   @dot "."

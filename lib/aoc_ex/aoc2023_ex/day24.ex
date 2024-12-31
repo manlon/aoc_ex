@@ -1,8 +1,8 @@
-defmodule Aoc2023Ex.Day24 do
-  use Aoc2023Ex.Day, day: 24
+defmodule AocEx.Aoc2023Ex.Day24 do
+  use AocEx.Day, day: 24
 
   defmodule Parser do
-    use Aoc2023Ex.Parser
+    use AocEx.Parser
     i = ascii_string([?-, ?0..?9], min: 1) |> map({String, :to_integer, []})
     coord = wrap(i |> istr(", ") |> concat(i) |> istr(", ") |> concat(i))
     line = coord |> istr(" @ ") |> concat(coord)
