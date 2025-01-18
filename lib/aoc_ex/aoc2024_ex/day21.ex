@@ -118,15 +118,12 @@ defmodule AocEx.Aoc2024Ex.Day21 do
   end
 
   def presses(num_levels) do
-    num_paths = numpad_paths()
-    dir_paths = dirpad_paths()
-
     {c, _memo} =
       input()
       |> Enum.reduce({0, %{}}, fn {s, n}, {acc, memo} ->
         [seg, ""] = String.split(s, "A")
-        numpad_expansions = possible_expansions(seg, num_paths)
-        {c, memo} = best_expansion(numpad_expansions, num_levels, dir_paths, memo)
+        numpad_expansions = possible_expansions(seg, numpad_paths())
+        {c, memo} = best_expansion(numpad_expansions, num_levels, dirpad_paths(), memo)
         {acc + c * n, memo}
       end)
 
