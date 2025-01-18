@@ -7,21 +7,11 @@ defmodule AocEx.Aoc2024Ex.Day21 do
   246A
   """
 
-  # @input_ex """
-  # 029A
-  # 980A
-  # 179A
-  # 456A
-  # 379A
-  # """
-
   def input do
-    # @input_ex
     @input
     |> String.split("\n", trim: true)
     |> Enum.map(fn line ->
       [[num]] = Regex.scan(~r/^\d+/, line)
-      # {String.graphemes(line), String.to_integer(num)}
       {line, String.to_integer(num)}
     end)
   end
@@ -48,7 +38,7 @@ defmodule AocEx.Aoc2024Ex.Day21 do
     "9" => [{"v", "6"}, {"<", "8"}]
   }
 
-  def find_paths(map, to, paths) do
+  def keypad_paths(map, to, paths) do
     newpaths =
       for path <- paths,
           [{_lastdir, lastnum} | _rest] = path,
@@ -62,7 +52,7 @@ defmodule AocEx.Aoc2024Ex.Day21 do
 
     case Enum.filter(newpaths, fn [{_dir, num} | _] -> num == to end) do
       [] ->
-        find_paths(map, to, newpaths)
+        keypad_paths(map, to, newpaths)
 
       paths ->
         paths
@@ -74,7 +64,7 @@ defmodule AocEx.Aoc2024Ex.Day21 do
     end
   end
 
-  def all_paths(map) do
+  def all_pair_paths(map) do
     for {num1, _} <- map,
         {num2, _} <- map,
         reduce: %{} do
@@ -82,49 +72,28 @@ defmodule AocEx.Aoc2024Ex.Day21 do
         if num1 == num2 do
           Map.put(acc, {num1, num2}, [""])
         else
-          Map.put(acc, {num1, num2}, find_paths(map, num2, [[{nil, num1}]]))
+          Map.put(acc, {num1, num2}, keypad_paths(map, num2, [[{nil, num1}]]))
         end
     end
   end
 
-  def all_num_paths_c, do: all_paths(@numneighbs) |> best_vals()
-  def all_dir_paths_c, do: all_paths(@dirneighbs) |> best_vals()
+  def numpad_paths, do: all_pair_paths(@numneighbs)
+  def dirpad_paths, do: all_pair_paths(@dirneighbs)
 
-  def expand_segment(seg, expansions) do
+  def possible_expansions(seg, routes) do
     ("A" <> seg <> "A")
     |> String.graphemes()
     |> Enum.chunk_every(2, 1, :discard)
-    |> Enum.map(fn [n1, n2] -> Map.get(expansions, {n1, n2}) end)
+    |> Enum.map(fn [n1, n2] -> routes[{n1, n2}] end)
   end
 
-  def expand_segment_best(seg, n, expansions, memo) do
-    new_segs = expand_segment(seg, expansions)
-
-    {c, memo} =
-      for seg_part_choices <- new_segs, reduce: {0, memo} do
-        {acc, memo} ->
-          {c, memo} =
-            for s <- seg_part_choices, reduce: {:inf, memo} do
-              {minc, memo} ->
-                {c, memo} = expand_segment_n({s, n - 1}, memo, expansions)
-                minc = min(c, minc)
-                {minc, memo}
-            end
-
-          {acc + c, memo}
-      end
-
-    {c, Map.put(memo, {seg, n}, c)}
-  end
-
-  def expand_segments_n(segs, n, expansions, memo) when is_list(segs) do
-    for ss <- segs,
-        reduce: {0, memo} do
+  def best_expansion(segment_expansion_sets, n, routes, memo) do
+    for segment_choices <- segment_expansion_sets, reduce: {0, memo} do
       {acc, memo} ->
         {c, memo} =
-          for s <- ss, reduce: {:inf, memo} do
+          for segment <- segment_choices, reduce: {:inf, memo} do
             {minc, memo} ->
-              {c, memo} = expand_segment_n({s, n}, memo, expansions)
+              {c, memo} = expand_segment(segment, n, memo, routes)
               minc = min(c, minc)
               {minc, memo}
           end
@@ -133,74 +102,37 @@ defmodule AocEx.Aoc2024Ex.Day21 do
     end
   end
 
-  def expand_segment_n({seq, n}, memo, expansions) do
-    # dbg(on: {seq, n}, mapsize: map_size(memo))
-
-    cond do
-      Map.has_key?(memo, {seq, n}) ->
-        c = Map.get(memo, {seq, n})
-        {c, memo}
-
-      n == 0 ->
-        # TODO A accounting
-        c = String.length(seq) + 1
-        memo = Map.put(memo, {seq, n}, c)
-        {c, memo}
-
-      true ->
-        {c, memo} = expand_segment_best(seq, n, expansions, memo)
-        {c, memo}
-    end
+  def expand_segment(seg, n, memo, _) when is_map_key(memo, {seg, n}) do
+    {memo[{seg, n}], memo}
   end
 
-  def most_conseq(s) do
-    s
-    |> String.graphemes()
-    |> Enum.chunk_every(2, 1, :discard)
-    |> Enum.reduce({0, 0}, fn [a, b], {max, count} ->
-      if a == b do
-        c = count + 1
-        {max(max, c), c}
-      else
-        {max, 0}
-      end
-    end)
+  def expand_segment(seg, 0, memo, _) do
+    c = String.length(seg) + 1
+    {c, Map.put(memo, {seg, 0}, c)}
   end
 
-  def take_shortest(strs) do
-    l = Enum.map(strs, &String.length/1) |> Enum.min()
-    Enum.filter(strs, fn s -> String.length(s) == l end)
+  def expand_segment(seg, n, memo, routes) do
+    expansions = possible_expansions(seg, routes)
+    {c, memo} = best_expansion(expansions, n - 1, routes, memo)
+    {c, Map.put(memo, {seg, n}, c)}
   end
 
-  def take_most_conseq(strs) do
-    most =
-      Enum.map(strs, &most_conseq/1)
-      |> Enum.max()
+  def presses(num_levels) do
+    num_paths = numpad_paths()
+    dir_paths = dirpad_paths()
 
-    Enum.filter(strs, fn s -> most_conseq(s) == most end)
-    # |> Enum.take(1)
-  end
-
-  def best_vals(map) do
-    Enum.into(map, %{}, fn {k, v} -> {k, v} end)
-  end
-
-  def solve1 do
-    num_paths = all_num_paths_c()
-    dir_paths = all_dir_paths_c()
-
-    {_c, _memo} =
+    {c, _memo} =
       input()
       |> Enum.reduce({0, %{}}, fn {s, n}, {acc, memo} ->
         [seg, ""] = String.split(s, "A")
-
-        numkeys =
-          expand_segment(seg, num_paths)
-          |> dbg
-
-        {c, memo} = expand_segments_n(numkeys, 25, dir_paths, memo)
-        dbg({c, n})
+        numpad_expansions = possible_expansions(seg, num_paths)
+        {c, memo} = best_expansion(numpad_expansions, num_levels, dir_paths, memo)
         {acc + c * n, memo}
       end)
+
+    c
   end
+
+  def solve1, do: presses(2)
+  def solve2, do: presses(25)
 end
