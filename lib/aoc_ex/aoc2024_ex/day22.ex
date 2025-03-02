@@ -56,14 +56,17 @@ defmodule AocEx.Aoc2024Ex.Day22 do
   end
 
   def solve1 do
-    # [1, 2, 3, 2024]
+    input()
+    |> Enum.map(fn n -> evolve_n(n, 2000) end)
+    |> Enum.sum()
+  end
+
+  def solve2 do
     input()
     |> Enum.reduce(%{}, fn seed, acc ->
       Map.merge(acc, seq_results(seed), fn _k, v1, v2 -> v1 + v2 end)
     end)
-
-    # input()
-    # |> Enum.map(fn n -> evolve_n(n, 2000) end)
-    # |> Enum.sum()
+    |> Map.values()
+    |> Enum.max()
   end
 end

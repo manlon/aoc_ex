@@ -87,7 +87,6 @@ defmodule AocEx.Aoc2024Ex.Day23 do
       |> Enum.at(0)
     else
       new_cliques = expand_cliques(edges, nodes, cliques)
-      dbg(Enum.count(new_cliques))
 
       expand_until_biggest(edges, nodes, new_cliques)
     end
