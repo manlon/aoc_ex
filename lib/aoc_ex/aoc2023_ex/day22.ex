@@ -16,74 +16,97 @@ defmodule AocEx.Aoc2023Ex.Day22 do
     end
   end
 
-  def z, do: Parser.parsed_input()
-
-  def bottom_points(_brick = {{x1, y1, z1}, {x2, y2, _z2}}) do
-    for x <- x1..x2 do
-      for y <- y1..y2 do
-        {x, y, z1}
-      end
-    end
-    |> List.flatten()
+  def downone(_brick = {{rx, ry, _rz = minz..maxz//1}, id}) do
+    {{rx, ry, (minz - 1)..(maxz - 1)}, id}
   end
 
-  def lowest(_brick = {{_, _, z}, _}), do: z
+  def base(_brick = {{_xr, _yr, _zr = minz.._maxz//1}, _}), do: minz
 
-  def fall_point({x, y, z}), do: {x, y, z - 1}
+  def intersect_at_base?(brick, bricks) do
+    z = base(brick)
+    {{bx, by, _bz}, _} = brick
 
-  def has_point?(_brick = {{x1, y1, z1}, {x2, y2, z2}}, _pt = {xp, yp, zp}) do
-    xp in x1..x2 && yp in y1..y2 && zp in z1..z2
+    Enum.any?(bricks, fn _b = {{o_x, o_y, o_z}, _} ->
+      z in o_z && !(Range.disjoint?(bx, o_x) || Range.disjoint?(by, o_y))
+    end)
   end
 
-  def atop?(b1, b2) do
-    bottom_points(b1)
-    |> Enum.map(&fall_point/1)
-    |> Enum.any?(&has_point?(b2, &1))
+  def fall(bricks), do: fall(bricks, [])
+
+  def fall([brick = {{_, _, minz.._//1}, _} | rest], acc) when minz <= 1 do
+    fall(rest, [brick | acc])
   end
 
-  def lock(bricks, settled) do
-    num_settled = length(settled)
+  def fall([brick | rest], acc) do
+    fallen = downone(brick)
+    blocked? = intersect_at_base?(fallen, rest) || intersect_at_base?(fallen, acc)
 
-    {unsettled, settled} =
-      Enum.reduce(bricks, {[], settled}, fn brick, {unsettled, settled} ->
-        if lowest(brick) == 1 do
-          {unsettled, [brick | settled]}
-        else
-          if Enum.any?(settled, &atop?(brick, &1)) do
-            {unsettled, [brick | settled]}
-          else
-            {[brick | unsettled], settled}
-          end
-        end
-      end)
-
-    if length(settled) == num_settled do
-      {unsettled, settled}
+    if blocked? do
+      fall(rest, [brick | acc])
     else
-      lock(unsettled, settled)
+      {true, [fallen | rest] ++ acc}
     end
   end
 
-  # assume bricks are not locked
-  # def fall([brick | rest], settled, acc) do
-  #   if(Enum.any?())
-  # end
-
-  def can_settle?(bricks) do
-    {bricks, _} = lock(bricks, [])
-    Enum.any?(bricks)
+  def fall([], acc) do
+    {false, Enum.reverse(acc)}
   end
 
-  def fall(_bricks, _settled) do
+  def settle(bricks) do
+    case fall(bricks) do
+      {true, new_bricks} -> settle(new_bricks)
+      {false, new_bricks} -> new_bricks
+    end
+  end
+
+  def brick_ranges do
+    Enum.map(Parser.parsed_input(), fn {{x1, y1, z1}, {x2, y2, z2}} ->
+      {x1..x2, y1..y2, z1..z2}
+    end)
+    |> Enum.with_index()
+  end
+
+  def safe_disint do
+    bricks = settle(brick_ranges())
+
+    for i <- 0..(length(bricks) - 1),
+        reduce: [] do
+      acc ->
+        brick = Enum.at(bricks, i)
+        bricks = List.delete_at(bricks, i)
+
+        case fall(bricks) do
+          {true, _} -> acc
+          {false, _} -> [brick | acc]
+        end
+    end
+  end
+
+  def disint_count do
+    bricks = settle(brick_ranges())
+
+    dbg(:settled)
+
+    bricks_idx = Enum.with_index(bricks)
+
+    Task.async_stream(
+      bricks_idx,
+      fn {brick, _i} ->
+        remain_bricks = List.delete(bricks, brick)
+        settled = settle(remain_bricks)
+        moved = length(remain_bricks -- settled)
+        moved
+      end,
+      ordered: false
+    )
+    |> Enum.map(fn {:ok, v} -> v end)
   end
 
   def solve1 do
-    _pts =
-      Parser.parsed_input()
-      |> then(fn bricks -> lock(bricks, []) end)
+    safe_disint() |> length()
   end
 
   def solve2 do
-    :ok
+    disint_count() |> Enum.sum()
   end
 end
