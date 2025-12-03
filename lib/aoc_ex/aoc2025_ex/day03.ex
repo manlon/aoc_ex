@@ -1,15 +1,18 @@
 defmodule AocEx.Aoc2025Ex.Day03 do
   use AocEx.Day, day: 3, year: 2025
 
-  def parsed_input() do
-    input_line_ints() |> Enum.map(fn [i] -> Integer.digits(i) end)
-  end
+  def parsed_input(), do: input_line_ints() |> Enum.map(fn [i] -> Integer.digits(i) end)
 
-  def max_jolt([], _, memo), do: {:ninf, memo}
+  def prepend_digit(_d, :none), do: :none
+  def prepend_digit(d, num), do: Integer.undigits([d | Integer.digits(num)])
 
-  def max_jolt(row, 1, memo) do
-    {Enum.max(row), memo}
-  end
+  def safe_max(a, :none), do: a
+  def safe_max(:none, b), do: b
+  def safe_max(a, b), do: max(a, b)
+
+  def max_jolt(row, ct), do: max_jolt(row, ct, %{}) |> elem(0)
+  def max_jolt([], _, memo), do: {:none, memo}
+  def max_jolt(row, 1, memo), do: {Enum.max(row), memo}
 
   def max_jolt(row = [b | rest], ct, memo) do
     if Map.has_key?(memo, {row, ct}) do
@@ -18,37 +21,13 @@ defmodule AocEx.Aoc2025Ex.Day03 do
     else
       {without_b, memo} = max_jolt(rest, ct, memo)
       {with_b_rest, memo} = max_jolt(rest, ct - 1, memo)
-
-      with_b =
-        case with_b_rest do
-          :ninf -> :ninf
-          x -> Integer.undigits([b | Integer.digits(x)])
-        end
-
-      {best, memo} =
-        if max(with_b, without_b) == :ninf do
-          {min(with_b, without_b), memo}
-        else
-          {max(with_b, without_b), memo}
-        end
-
+      with_b = prepend_digit(b, with_b_rest)
+      best = safe_max(with_b, without_b)
       memo = Map.put(memo, {row, ct}, best)
       {best, memo}
     end
   end
 
-  def max_jolt_val(row, ct) do
-    {v, _memo} = max_jolt(row, ct, %{})
-    v
-  end
-
-  def solve1() do
-    parsed_input()
-    |> Enum.map(fn row -> max_jolt_val(row, 2) end)
-  end
-
-  def solve2() do
-    parsed_input()
-    |> Enum.map(fn row -> max_jolt_val(row, 12) end)
-  end
+  def solve1(), do: Enum.sum(Stream.map(parsed_input(), fn row -> max_jolt(row, 2) end))
+  def solve2(), do: Enum.sum(Stream.map(parsed_input(), fn row -> max_jolt(row, 12) end))
 end
