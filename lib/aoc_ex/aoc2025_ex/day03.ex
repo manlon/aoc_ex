@@ -5,11 +5,7 @@ defmodule AocEx.Aoc2025Ex.Day03 do
 
   def prepend_digit(_d, :none), do: :none
   def prepend_digit(d, num), do: Integer.undigits([d | Integer.digits(num)])
-
-  def safe_max(a, :none), do: a
-  def safe_max(:none, b), do: b
-  def safe_max(a, b), do: max(a, b)
-
+  def safe_max(a, b), do: Enum.reject([a, b], &(&1 == :none)) |> Enum.max(&>=/2, fn -> :none end)
   def max_jolt(row, ct), do: max_jolt(row, ct, %{}) |> elem(0)
   def max_jolt([], _, memo), do: {:none, memo}
   def max_jolt(row, 1, memo), do: {Enum.max(row), memo}
