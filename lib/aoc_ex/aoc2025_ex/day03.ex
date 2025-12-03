@@ -16,13 +16,11 @@ defmodule AocEx.Aoc2025Ex.Day03 do
 
   def max_jolt(row = [b | rest], ct, memo) do
     if Map.has_key?(memo, {row, ct}) do
-      n = Map.fetch!(memo, {row, ct})
-      {n, memo}
+      {Map.fetch!(memo, {row, ct}), memo}
     else
-      {without_b, memo} = max_jolt(rest, ct, memo)
-      {with_b_rest, memo} = max_jolt(rest, ct - 1, memo)
-      with_b = prepend_digit(b, with_b_rest)
-      best = safe_max(with_b, without_b)
+      {best_without_b, memo} = max_jolt(rest, ct, memo)
+      {best_suffix_for_b, memo} = max_jolt(rest, ct - 1, memo)
+      best = safe_max(best_without_b, prepend_digit(b, best_suffix_for_b))
       memo = Map.put(memo, {row, ct}, best)
       {best, memo}
     end
