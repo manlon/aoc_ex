@@ -28,7 +28,7 @@ defmodule AocEx.Aoc2023Ex.Day23 do
 
   def extend_paths_rev(_map, [], res, _dest, _slip, _memo), do: res
 
-  def extend_paths_rev(map, paths = [path = {loc, set} | rest], res, dest, slip, memo) do
+  def extend_paths_rev(map, paths = [path = {loc, set} | rest], res, dest, slip, _memo) do
     if :rand.uniform() < 0.000001 do
       dbg({length(paths), res})
     end
