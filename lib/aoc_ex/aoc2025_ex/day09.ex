@@ -58,8 +58,8 @@ defmodule AocEx.Aoc2025Ex.Day09 do
     for a = [ra, ca] <- pts,
         b = [rb, cb] <- pts,
         a < b,
-        top = min(ra, rb),
-        left = min(ca, cb),
+        _top = min(ra, rb),
+        _left = min(ca, cb),
         # num_borders_above =
         #  Enum.count(horiz, fn {r, crange} -> r <= top and (left + 1) in crange end),
         # rem(num_borders_above, 2) == 1,
