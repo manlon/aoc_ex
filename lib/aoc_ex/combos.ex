@@ -42,4 +42,9 @@ defmodule AocEx.Combos do
     Stream.map(Enum.count(seq)..0//-1, &combo_stream(seq, &1))
     |> Stream.concat()
   end
+
+  def subsets_asc(seq) do
+    Stream.map(0..Enum.count(seq)//1, &combo_stream(seq, &1))
+    |> Stream.concat()
+  end
 end
